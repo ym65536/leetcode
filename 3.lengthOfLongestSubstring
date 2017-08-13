@@ -1,0 +1,24 @@
+int lengthOfLongestSubstring(string s) 
+{    
+    unordered_set<char> cset;
+    int left = 0;
+    int right = 0;
+    int result = 0;
+
+    while (left < s.size() && right < s.size())
+    {
+        if (cset.find(s[right]) == cset.end()) // not find same char
+        {
+            cset.insert(s[right]);
+            right++;
+            result = max(result, right - left);
+        }
+        else
+        {
+            cset.erase(s[left]);
+            left++;
+        }
+    }
+
+    return result;
+}
