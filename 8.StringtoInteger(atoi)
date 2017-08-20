@@ -1,0 +1,28 @@
+int myAtoi(string str) 
+{
+    long long int result = 0;
+    int flag = 1;
+    int i = 0;
+
+    i = str.find_first_not_of(' ');
+    if (i == string::npos)
+        return result;
+    if (str[i] == '-' || str[i] == '+')
+    {
+        flag = (str[i] == '-') ? -1 : 1;
+        i++;
+    }   
+    while (i < str.size() && isdigit(str[i]))
+    {
+        result = 10 * result + (str[i] - '0');
+        i++;
+
+        if ((flag * result) > INT_MAX)
+            return INT_MAX;
+        if ((flag * result) < INT_MIN)
+            return INT_MIN;
+    }   
+    result *= flag;
+
+    return (int)result;
+}
