@@ -1,0 +1,30 @@
+vector<int> findSubstring(string s, vector<string>& words) 
+{
+    vector<int> result;
+    map<string, int> wc;
+    if (words.size() == 0)
+        return result;
+    int wlen = words[0].size();
+
+    for (string word : words)
+        wc[word]++;
+
+    for (int i = 0; i <= (int)s.size() - wlen * (int)words.size(); i++)
+    {
+        map<string, int> tmap;
+        int j = 0;
+        for (; j < (int)words.size(); j++)
+        {
+            string str = s.substr(i + j * wlen, wlen);
+            if (wc.find(str) == wc.end()) // word not exist
+                break;
+            tmap[str]++;
+            if (tmap[str] > wc[str])
+                break;
+        }
+        if (j >= (int)words.size())
+            result.push_back(i);
+    }
+
+    return result;
+}
