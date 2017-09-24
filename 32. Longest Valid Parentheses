@@ -1,0 +1,41 @@
+int longestValidParentheses(string s) 
+{
+    stack<pair<int, char> > stk;
+    int maxlen = 0;
+    int start = -1;
+
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (s[i] == '(')
+        {
+            stk.push(make_pair(i, '('));
+        }
+        else if (s[i] == ')')
+        {
+            if (!stk.empty())
+            {
+                int len = 0;
+                stk.pop();
+                if (stk.empty())
+                {
+                    len = i - start;
+                }
+                else
+                {
+                    len = i - stk.top().first;
+                }
+                maxlen = max(maxlen, len);
+            }
+            else
+            {
+                start = i;
+            }
+        }
+        else
+        {
+            // do nothing
+        }
+    }
+
+    return maxlen;
+}
