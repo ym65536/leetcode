@@ -1,0 +1,38 @@
+bool wordPattern(string pattern, string str) 
+{
+    vector<string> words;
+    split(str, ' ', words);
+    if (pattern.size() != words.size())
+        return false;
+
+    map<char, string> record;
+    for (int i = 0; i < pattern.size(); i++)
+    {
+        if (record.find(pattern[i]) == record.end())
+        {
+            for (map<char, string>::iterator it = record.begin(); it != record.end(); ++it)
+            {
+                if (it->second == words[i])
+                    return false;
+            }
+            record[pattern[i]] = words[i];
+        }
+        else
+        {
+            if (record[pattern[i]] != words[i])
+                return false;
+        }
+    }
+    return true;
+}
+
+void split(const std::string &s, char delim, vector<string>& result) 
+{
+    std::stringstream ss;
+    ss.str(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) 
+    {
+        result.push_back(item);
+    }
+}
