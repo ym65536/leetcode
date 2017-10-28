@@ -1,0 +1,26 @@
+vector<vector<int>> combinationSum(vector<int>& candidates, int target) 
+{
+    vector<vector<int>> result;
+    vector<int> line;
+
+    sort(candidates.begin(), candidates.end());
+    dfs(result, line, 0, candidates, target);
+
+    return result;
+}
+
+void dfs(vector<vector<int>>& result, vector<int>& line, int start, vector<int> candidates, int target)
+{
+    if (target <= 0)
+    {
+        if (target == 0)
+            result.push_back(line);
+        return;
+    }
+    for (int i = start; i < candidates.size(); i++)
+    {
+        line.push_back(candidates[i]);
+        dfs(result, line, i, candidates, target - candidates[i]);
+        line.pop_back();
+    }
+}
