@@ -1,0 +1,24 @@
+vector<int> inorderTraversal(TreeNode* root) 
+{
+    vector<int> result;
+    TreeNode* visit = root;
+    stack<TreeNode*> stree;
+
+    while (visit != NULL || !stree.empty())
+    {
+        if (visit != NULL)
+        {            
+            stree.push(visit);
+            visit = visit->left;
+        }
+        else
+        {
+            visit = stree.top();
+            stree.pop();
+            result.push_back(visit->val);
+            visit = visit->right;
+        }
+    }
+
+    return result;
+}
