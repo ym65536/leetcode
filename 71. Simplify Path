@@ -1,1 +1,28 @@
 
+string simplifyPath(string path) 
+{
+    string result;
+    stringstream ss;
+    ss.str(path);
+    vector<string> vs;
+
+    string dir;
+    while (getline(ss, dir, '/'))
+    {
+        if (dir == "." || dir == "")
+            continue;
+        if (dir == "..")
+        {
+            if (!vs.empty()) 
+                vs.pop_back();
+        }
+        else
+        {
+            vs.push_back(dir);
+        }
+    }
+
+    for (string dir : vs)
+        result += "/" + dir;
+    return result.empty() ? "/" : result;
+}
