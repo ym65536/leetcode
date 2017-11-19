@@ -1,0 +1,24 @@
+vector<vector<int>> subsets(vector<int>& nums) 
+{
+    vector<vector<int>> result;
+    vector<int> solution;
+    
+    result.push_back(solution);
+    dfs(result, solution, nums, 0);
+    
+    return result;
+}
+
+void dfs(vector<vector<int>>& result, vector<int>& solution, vector<int>& nums, int start)
+{
+    if (start == nums.size())
+        return;
+    
+    for (int i = start; i < nums.size(); i++)
+    {
+        solution.push_back(nums[i]);
+        result.push_back(solution);
+        dfs(result, solution, nums, i + 1);
+        solution.pop_back();
+    }
+}
