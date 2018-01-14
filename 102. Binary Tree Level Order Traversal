@@ -1,0 +1,28 @@
+vector<vector<int>> levelOrder(TreeNode* root) {
+    vector<vector<int>> solution;
+    vector<int> line;
+    queue<TreeNode* > tq;
+    if (root != NULL)
+        tq.push(root);
+    int current_line_size = 1;
+    int next_line_size = 0;
+
+    while (!tq.empty()) {
+        TreeNode* visit = tq.front();
+        tq.pop();
+        line.push_back(visit->val);
+        current_line_size --;
+        if (visit->left)
+            tq.push(visit->left), next_line_size++;
+        if (visit->right)
+            tq.push(visit->right), next_line_size++;
+        if (current_line_size == 0) {
+            current_line_size = next_line_size;
+            next_line_size = 0;
+            solution.push_back(line);
+            line.clear();
+        }
+    }
+
+    return solution;
+}
