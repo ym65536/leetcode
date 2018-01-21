@@ -1,0 +1,26 @@
+TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+    if (preorder.size() != inorder.size() || preorder.size() == 0) {
+        return NULL;
+    }
+    TreeNode* root = dfs(preorder, 0, preorder.size() - 1, inorder, 0, inorder.size() - 1);
+    return root;
+}
+
+TreeNode* dfs(vector<int>& preorder, int ps, int pr, vector<int>& inorder, int is, int ir) {
+    if (ps > pr) {
+        return NULL;
+    }
+    TreeNode* root = new TreeNode(preorder[ps]);
+    int povit = 0;
+    for (int i = is; i <= ir; i++) {
+        if (inorder[i] == preorder[ps]) {
+            povit = i;
+            break;
+        }
+    }
+    int left_size = povit - is;
+    int right_size = ir - povit;
+    root->left = dfs(preorder, ps + 1, ps + left_size, inorder, is, povit - 1);
+    root->right = dfs(preorder, pr - right_size + 1, pr, inorder, povit + 1, ir);
+    return root;
+}
