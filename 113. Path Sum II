@@ -1,0 +1,21 @@
+vector<vector<int>> pathSum(TreeNode* root, int sum) 
+{
+    stack<TreeNode*> stree;
+    vector<vector<int>> result;
+    vector<int> solution;
+
+    dfs(result, solution, root, sum);
+    return result;
+}
+
+void dfs(vector<vector<int>>& result, vector<int>& solution, TreeNode* root, int sum) {
+    if (root == NULL)
+        return;
+    solution.push_back(root->val);
+    if ((root->left == NULL && root->right == NULL) && (root->val == sum)) {
+        result.push_back(solution);
+    }
+    dfs(result, solution, root->left, sum - root->val);
+    dfs(result, solution, root->right, sum - root->val);
+    solution.pop_back();
+}
