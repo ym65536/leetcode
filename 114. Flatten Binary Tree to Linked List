@@ -1,0 +1,15 @@
+void flatten(TreeNode* root) {
+    if (root == NULL) {
+        return;
+    }
+    if (root->left) {
+        TreeNode* visitor = root->left;
+        while (visitor->right) {
+            visitor = visitor->right;
+        }
+        visitor->right = root->right;
+        root->right = root->left;
+        root->left = NULL;
+    }
+    flatten(root->right);
+}
