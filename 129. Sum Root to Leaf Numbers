@@ -1,13 +1,38 @@
 int sumNumbers(TreeNode* root) {
-        return rootSum(root, 0);
+    return rootSum(root, 0);
+}
+
+int rootSum(TreeNode* root, int sum) {
+    if (root == NULL) {
+        return sum;
     }
-    
-    int rootSum(TreeNode* root, int sum) {
-        if (root == NULL) {
-            return sum;
-        }
-        if (!root->left && !root->right)  {
-            return sum * 10 + root->val;
-        }
-        return rootSum(root->left, 10 * sum + root->val) + rootSum(root->right, 10 * sum + root->val);
+    if (!root->left && !root->right)  {
+        return sum * 10 + root->val;
     }
+    return rootSum(root->left, 10 * sum + root->val) + rootSum(root->right, 10 * sum + root->val);
+}
+
+int sumNumbers(TreeNode* root) {
+    if (root == NULL) {
+        return 0;
+    }
+    int result = 0;
+    stack<pair<TreeNode*, int>> stn;
+    stn.push(make_pair(root, 0));
+
+    while (!stn.empty()) {
+        auto node = stn.top();
+        stn.pop();
+        if (!node.first->left && !node.first->right) {
+            result += node.second * 10 + node.first->val;
+        }
+        if (node.first->left) {
+            stn.push(make_pair(node.first->left, node.second * 10 + node.first->val));
+        }
+        if (node.first->right) {
+            stn.push(make_pair(node.first->right, node.second * 10 + node.first->val));
+        }
+    }
+
+    return result;
+}
