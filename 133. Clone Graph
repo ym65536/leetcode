@@ -1,0 +1,19 @@
+UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
+    if (node == NULL) {
+        return node;
+    }
+    int label = node->label;
+    if (nodes_.count(label)) {
+        return nodes_[label];
+    }
+    UndirectedGraphNode* cloneNode = new UndirectedGraphNode(label);
+    nodes_[label] = cloneNode;
+
+    for (int i = 0; i < node->neighbors.size(); i++) {
+        UndirectedGraphNode* neighbor = cloneGraph(node->neighbors[i]);
+        cloneNode->neighbors.push_back(neighbor);
+    }
+    return cloneNode;
+}
+
+unordered_map<int, UndirectedGraphNode*> nodes_;
