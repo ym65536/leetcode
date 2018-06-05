@@ -1,0 +1,20 @@
+vector<int> preorderTraversal(TreeNode* root) {
+    vector<int> result;
+    stack<TreeNode*> nodes;
+    TreeNode* visitor = root;
+
+    while (!nodes.empty() || visitor) {
+        if (visitor) {
+            result.push_back(visitor->val);
+            if (visitor->right) {
+                nodes.push(visitor->right);
+            }
+            visitor = visitor->left;
+        } else {
+            visitor = nodes.top();
+            nodes.pop();
+        }
+    }
+
+    return result;
+}
