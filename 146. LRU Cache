@@ -1,0 +1,71 @@
+struct LRUNode {
+    LRUNode* prev;
+    LRUNode* next;
+    int key;
+    int value;
+    LRUNode(int k, int v): key(k), value(v), prev(this), next(this) {
+    };
+};
+
+typedef LRUNode* LRUNodePtr;
+
+class LRUCache {
+public:
+    LRUCache(int capacity): capacity_(capacity) {
+        list_head_ = new LRUNode(-1, -1);
+    }
+    
+    int get(int key) {
+        auto it = node_map_.find(key);
+        if (it == node_map_.end()) {
+            return -1;
+        }
+        list_remove_node(it->second);
+        list_insert_head(list_head_, it->second);
+        return it->second->value;
+    }
+    
+    void put(int key, int value) {
+        if (get(key) > 0) {
+            node_map_[key]->value = value;
+            return;
+        }
+        
+        LRUNodePtr node = new LRUNode(key, value);
+        if (node_map_.size() >= capacity_) {
+            LRUNodePtr lrunode = list_head_->prev;
+            list_remove_node(lrunode);
+            node_map_.erase(lrunode->key);
+        }
+        list_insert_head(list_head_, node);
+        node_map_.insert(make_pair(key, node)); 
+    }
+    
+    void list_remove_node(LRUNodePtr& node) {
+        node->prev->next = node->next;
+        node->next->prev = node->prev;
+    }
+    
+    void list_insert_head(LRUNodePtr list_head, LRUNodePtr& node) {
+        list_add_node(list_head, list_head->next, node);
+    }
+    
+    void list_add_node(LRUNodePtr left, LRUNodePtr right, LRUNodePtr& node) {
+        node->next = right;
+        node->prev = left;
+        left->next = node;
+        right->prev = node;
+    }
+    
+private:
+    int capacity_;
+    LRUNodePtr list_head_;
+    map<int, LRUNodePtr> node_map_;
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
