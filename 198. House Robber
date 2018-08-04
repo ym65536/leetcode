@@ -1,0 +1,7 @@
+int rob(vector<int>& nums) {
+    vector<int> result(nums.size() + 2, 0);
+    for (int i = 0; i < nums.size(); ++ i) {
+        result[i + 2] = max(result[i + 1], result[i] + nums[i]);
+    }
+    return result[result.size() - 1];
+}
