@@ -1,0 +1,52 @@
+struct TrieNode {
+    shared_ptr<TrieNode> child[26] = {nullptr};
+    bool last = false;
+};
+
+class WordDictionary {
+public:
+    /** Initialize your data structure here. */
+    WordDictionary() {
+        root = make_shared<TrieNode>();
+        root->last = true;
+    }
+    
+    /** Adds a word into the data structure. */
+    void addWord(string word) {
+        shared_ptr<TrieNode> tnode = root;
+        for (auto c : word) {
+            int index = c - 'a';
+            if (tnode->child[index] == nullptr) {
+                tnode->child[index] = make_shared<TrieNode>();
+            }
+            tnode = tnode->child[index];
+        }
+        tnode->last = true;
+    }
+    
+    /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
+    bool search(string word) {
+        return dfs(word, root);
+    }
+    
+    bool dfs(string word, const shared_ptr<TrieNode>& root) {
+        if (root == nullptr) {
+            return false;
+        }
+        if (word.size() == 0) {
+            return root->last;
+        }
+        char c = word[0];
+        if (c != '.') {
+            return dfs(word.substr(1), root->child[c - 'a']);
+        } 
+        bool result = false;
+        for (int i = 0; (result == false) && (i < 26); ++i) {
+            result |= dfs(word.substr(1), root->child[i]);
+        }
+        return result;
+    }
+    
+private:
+    shared_ptr<TrieNode> root;
+};
