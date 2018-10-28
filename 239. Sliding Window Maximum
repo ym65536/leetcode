@@ -1,0 +1,17 @@
+vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+    vector<int> result;
+    deque<int> max_que;
+    for (int i = 0; i < nums.size(); ++i) {
+        while (!max_que.empty() && nums[max_que.back()] < nums[i]) {
+            max_que.pop_back();
+        }
+        if (!max_que.empty() && i - max_que.front() == k) {
+            max_que.pop_front();
+        }
+        max_que.push_back(i);
+        if (i >= k - 1) {
+            result.push_back(nums[max_que.front()]);
+        }
+    }
+    return result;
+}
