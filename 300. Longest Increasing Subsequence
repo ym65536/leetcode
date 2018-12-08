@@ -1,23 +1,25 @@
-int lengthOfLIS(vector<int>& nums) 
-{
+int lengthOfLIS(vector<int>& nums)  {
     // BIS[k]表示num[0,k-1]中递增子序列最后一个元素最小的那个序列
-    vector<int> BIS(nums.size() + 1, INT_MAX);
-    int len = 0;
+    // BIS_tails表示BIS的最后一个元素
+    vector<int> BIS_tails(nums.size() + 1, INT_MAX);
 
-    for (int i = 0; i < nums.size(); i++)
-    {
-        for (int k = 0; k < i; k++)
-        {
-            if (nums[i] > BIS[k] && nums[i] < BIS[k + 1])
-                BIS[k + 1] = nums[i];
+    for (int i = 0; i < nums.size(); ++ i) {
+        for (int k = 0; k < i; ++ k) {
+            if (nums[i] > BIS_tails[k] && nums[i] < BIS_tails[k + 1]) {
+                BIS_tails[k + 1] = nums[i];
+            }
         }
-        if (BIS[0] > nums[i])
-            BIS[0] = nums[i];
+        if (BIS_tails[0] > nums[i]) {
+            BIS_tails[0] = nums[i];
+        }
     }
 
-    for (len = 0; len < BIS.size(); len++)
-        if (BIS[len] >= INT_MAX)
+    int len = 0;
+    for (auto tail : BIS_tails) {
+        if (tail == INT_MAX) {
             break;
-
+        }
+        ++ len;
+    }
     return len;
 }
