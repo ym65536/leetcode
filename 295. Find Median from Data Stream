@@ -1,0 +1,32 @@
+class MedianFinder {
+public:
+    /** initialize your data structure here. */
+    MedianFinder() {
+        
+    }
+    
+    void addNum(int num) {
+        low_half.push(num);
+        high_half.push(low_half.top());
+        low_half.pop();
+        if (low_half.size() < high_half.size()) {
+            low_half.push(high_half.top());
+            high_half.pop();
+        }
+    }
+    
+    double findMedian() {
+        return low_half.size() > high_half.size() ? 
+            low_half.top() * 1.0 : (low_half.top() + high_half.top()) / 2.0;
+    }
+private:
+    priority_queue<int> high_half;
+    priority_queue<int, vector<int>, greater<int>> low_half;
+};
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */
