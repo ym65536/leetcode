@@ -1,0 +1,35 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    /** @param head The linked list's head.
+        Note that the head is guaranteed to be not null, so it contains at least one node. */
+    Solution(ListNode* head) {
+        head_ = head;
+    }
+    
+    /** Returns a random node's value. */
+    int getRandom() {
+        int result = INT_MIN;
+        ListNode* visit = head_;
+        int sample = 1;
+        while (visit) {
+            int k = random() % sample;
+            if (k == 0) {
+                result = visit->val;
+            }
+            ++ sample;
+            visit = visit->next;
+        }
+        return result;
+    }
+    
+private:
+    ListNode* head_;
+};
