@@ -1,0 +1,54 @@
+class LFUCache {
+public:
+    LFUCache(int capacity) {
+        cap_ = capacity;
+        min_freq_ = -1;
+    }
+    
+    int get(int key) {
+        if (values_.count(key) == 0) {
+            return -1;
+        }
+        Node& node = values_[key];
+        freq_list_[node.freq].erase(node.iter);
+        ++ node.freq;
+        freq_list_[node.freq].emplace_back(key);
+        node.iter = -- freq_list_[node.freq].end();
+        if (freq_list_[min_freq_].size() == 0) {
+            ++min_freq_;
+        }
+        return node.value;
+    }
+    
+    void put(int key, int value) {
+        if (cap_ <= 0) {
+            return;
+        }
+        int ret = get(key);
+        if (ret != -1) {
+            values_[key].value = value;
+            return;
+        }
+        if (values_.size() >= cap_) {
+            auto& list = freq_list_[min_freq_];
+            int evicted_key = list.front();
+            list.pop_front();
+            values_.erase(evicted_key);
+        }
+        min_freq_ = 1;
+        auto& list = freq_list_[min_freq_];
+        list.emplace_back(key);
+        values_[key] = {value, min_freq_, -- list.end()};
+        
+    }
+private:
+    int cap_;
+    int min_freq_;
+    struct Node {
+        int value;
+        int freq;
+        list<int>::iterator iter;
+    };
+    unordered_map<int, Node> values_; // key - node
+    unordered_map<int, list<int>> freq_list_; // freq list_keys
+};
