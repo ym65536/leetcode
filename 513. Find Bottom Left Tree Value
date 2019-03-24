@@ -1,0 +1,28 @@
+int findBottomLeftValue(TreeNode* root) {
+    queue<TreeNode*> Q;
+    Q.push(root);
+    int line_nodes = 1;
+    int next_line_nodes = 0;
+    vector<int> line_values;
+    int most_left = -1;
+    while (!Q.empty()) {
+        TreeNode* node = Q.front();
+        Q.pop();
+        line_values.push_back(node->val);
+        if (node->left) {
+            next_line_nodes ++;
+            Q.push(node->left);
+        }
+        if (node->right) {
+            next_line_nodes ++;
+            Q.push(node->right);
+        }
+        if (-- line_nodes == 0) {
+            most_left = line_values.front();
+            line_values.clear();
+            line_nodes = next_line_nodes;
+            next_line_nodes = 0;
+        }
+    }
+    return most_left;
+}
