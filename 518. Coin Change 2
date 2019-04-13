@@ -1,0 +1,42 @@
+DFS(will be TLE): 
+int change(int amount, vector<int>& coins) {
+  vector<vector<int>> result;
+  vector<int> solution;
+  sort(coins.begin(), coins.end());
+  dfs(result, solution, amount, coins);
+  set<vector<int>> tmp;
+  for (auto item : result) {
+	  sort(item.begin(), item.end());
+	  tmp.insert(item);
+  }
+  return amount == 0 ? 1 : tmp.size();
+}
+
+void dfs(vector<vector<int>>& result, vector<int>& solution, int amount, vector<int>& coins) {
+  if (amount <= 0) {
+	if (amount == 0) {
+	  result.push_back(solution);
+	}   
+	return;
+  }
+  for (uint32_t i = 0; i < coins.size(); ++ i) {
+	solution.push_back(coins[i]);
+	dfs(result, solution, amount - coins[i], coins);
+	solution.pop_back();
+  }
+}
+
+
+DP(AC): 
+int change(int amount, vector<int>& coins) {
+  vector<int> dp(amount + 1, 0);
+  dp[0] = 1;
+  for (auto coin : coins) {
+	  for (int a = 1; a <= amount; ++ a) {
+		if (a - coin >= 0) {
+			dp[a] += dp[a - coin];
+		}
+	  }
+	}
+	return dp[amount];
+}
