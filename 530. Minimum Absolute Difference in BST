@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int getMinimumDifference(TreeNode* root) {
+        dfs(root);
+        return mindiff_;
+    }
+    
+    void dfs(TreeNode* root) {
+        if (root == nullptr){
+            return;
+        }
+        dfs(root->left);
+        if (prev_ != -1) {
+            mindiff_ = min(mindiff_, root->val - prev_);
+        }
+        prev_ = root->val;
+        dfs(root->right);
+    }
+private:
+    int prev_ = -1;
+    int mindiff_ = INT_MAX;
+};
