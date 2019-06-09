@@ -1,0 +1,16 @@
+int maxSumTwoNoOverlap(vector<int>& A, int L, int M) {
+        vector<int> presum(A.size(), 0);
+        presum[0] = A[0];
+        for (int i = 1; i < A.size(); ++ i) {
+            presum[i] = presum[i - 1] + A[i];
+        }
+        int maxL = presum[L - 1];
+        int maxM = presum[M - 1];
+        int maxSum = presum[L + M - 1];
+        for (int i = L + M; i < A.size(); ++ i) {
+            maxL = max(maxL, presum[i - M] - presum[i - M - L]);
+            maxM = max(maxM, presum[i - L] - presum[i - L - M]);
+            maxSum = max(maxSum, max(maxL + presum[i] - presum[i - M], maxM + presum[i] - presum[i - L]));
+        }
+        return maxSum;
+    }
