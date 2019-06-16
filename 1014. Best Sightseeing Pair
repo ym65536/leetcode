@@ -1,0 +1,12 @@
+int maxScoreSightseeingPair(vector<int>& A) {
+	int pivot = 0;
+	int max_sum = A[pivot] + pivot + A[1] - 1;
+	for (int j = 1; j < A.size(); ++ j) {
+		int tmp = A[pivot] + pivot + A[j] - j;
+		max_sum = max(max_sum, tmp);
+		if (A[pivot] + pivot < A[j] + j) {
+			pivot = j;
+		}
+	}
+	return max_sum;
+}
