@@ -1,0 +1,33 @@
+bool isCousins(TreeNode* root, int x, int y) {
+	queue<pair<TreeNode*, TreeNode*>> Q;
+	Q.push(make_pair(root, nullptr));
+	while (!Q.empty()) {
+		int size = Q.size();
+		bool find_x = false;
+		bool find_y = false;
+		TreeNode* parent_x = nullptr;
+		TreeNode* parent_y = nullptr;
+		for (int i = 0; i < size; ++ i) {
+			auto item = Q.front();
+			Q.pop();
+			if (item.first->val == x) {
+				find_x = true;
+				parent_x = item.second;
+			}
+			if (item.first->val == y) {
+				find_y = true;
+				parent_y = item.second;
+			}
+			if (find_x && find_y) {
+				return parent_x != parent_y;
+			}
+			if (item.first->left != nullptr) {
+				Q.push(make_pair(item.first->left, item.first));
+			}
+			if (item.first->right != nullptr) {
+				Q.push(make_pair(item.first->right, item.first));
+			} 
+		}
+	}
+	return false;
+}
