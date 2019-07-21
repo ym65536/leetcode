@@ -1,0 +1,23 @@
+vector<vector<int>> intervalIntersection(vector<vector<int>>& A, vector<vector<int>>& B) {
+    int ia = 0;
+    int ib = 0;
+    vector<vector<int>> result;
+    while (ia < A.size() && ib < B.size()) {
+        if (A[ia][1] < B[ib][0]) {
+            ++ ia;
+        } else if (A[ia][0] > B[ib][1]) {
+            ++ ib;
+        } else { // intersection
+            result.push_back({max(A[ia][0], B[ib][0]), min(A[ia][1], B[ib][1])});
+            if (A[ia][1] < B[ib][1]) {
+                ++ ia;
+            } else if (A[ia][1] > B[ib][1]) {
+                ++ ib;
+            } else {
+                ++ ia;
+                ++ ib;
+            }
+        }
+    }
+    return result;
+}
