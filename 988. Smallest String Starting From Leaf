@@ -1,0 +1,23 @@
+string smallestFromLeaf(TreeNode* root) {
+    set<string> result;
+    dfs(root, "", result);
+    return *result.begin();
+}
+
+void dfs(TreeNode* root, string solution, set<string>& result) {
+    if (root == nullptr) {
+        return;
+    }
+    string val;
+    val.push_back((char)('a' + root->val));
+    if (root->left == nullptr && root->right == nullptr) {
+        solution = val + solution;
+        result.insert(solution);
+    }
+    if (root->left) {
+        dfs(root->left, val + solution, result);
+    }
+    if (root->right) {
+        dfs(root->right, val + solution, result);
+    }
+}
