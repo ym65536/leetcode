@@ -1,0 +1,16 @@
+int mincostTickets(vector<int>& days, vector<int>& costs) {
+    int day_cost[366] = {0}; // day_cost[0] is sentry
+    int tick_idx = 0;
+    for (int day = 1; day <= 365 && tick_idx < days.size(); ++ day) {
+        if (days[tick_idx] == day) {
+            int cost1 = day >= 1 ? day_cost[day - 1] + costs[0] : costs[0];
+            int cost7 = day >= 7 ? day_cost[day - 7] + costs[1] : costs[1];
+            int cost30 = day >= 30 ? day_cost[day - 30] + costs[2] : costs[2];
+            day_cost[day] = min(min(cost1, cost7), cost30);
+            ++ tick_idx;
+        } else {
+            day_cost[day] = day_cost[day - 1];
+        }
+    }
+    return day_cost[*days.rbegin()];
+}
