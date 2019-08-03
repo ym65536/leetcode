@@ -1,0 +1,29 @@
+class TimeMap {
+public:
+    /** Initialize your data structure here. */
+    TimeMap() {
+        
+    }
+    
+    void set(string key, string value, int timestamp) {
+        auto& tv = tm_[key];
+        tv[timestamp] = value;
+    }
+    
+    string get(string key, int timestamp) {
+        auto it = tm_.find(key);
+        if (it == tm_.end()) {
+            return "";
+        }
+        auto iter = it->second.upper_bound(timestamp);
+        if (iter != it->second.begin()) {
+            -- iter;
+            return iter->second;
+        } else {
+            return "";
+        }
+    }
+    
+private:
+    unordered_map<string, map<int, string>> tm_;
+};
