@@ -1,0 +1,17 @@
+int subarraysDivByK(vector<int>& A, int K) {
+    vector<int> presums(A.size() + 1, 0);
+    for (auto i = 0; i < A.size(); ++ i) {
+        presums[i + 1] = A[i] + presums[i];
+    }
+    vector<int> mod_counts(K, 0);
+    for (auto presum : presums) {
+        auto mod = (presum % K + K) % K;
+        ++ mod_counts[mod];
+    }
+    int result = 0;
+    for (auto mod_count : mod_counts) {
+        result += mod_count * (mod_count - 1) / 2;
+    }
+
+    return result;
+}
