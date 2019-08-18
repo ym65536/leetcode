@@ -1,0 +1,12 @@
+bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
+    stack<int> s;
+    int idx = 0;
+    for (auto elem : pushed) {
+        s.push(elem);
+        while (!s.empty() && idx < popped.size() && popped[idx] == s.top()) {
+            s.pop();
+            ++ idx;
+        }
+    }
+    return idx == popped.size();
+}
