@@ -13,3 +13,25 @@ vector<int> twoSum(vector<int>& nums, int target) {
     }
     return result;
 }
+
+
+vector<int> twoSum(vector<int>& nums, int target) {
+    vector<int> result;
+    vector<pair<int, int>> num_arr;
+    for (uint32_t i = 0; i < nums.size(); ++ i) {
+        num_arr.push_back(make_pair(nums[i], i));
+    }
+    sort(num_arr.begin(), num_arr.end(), [](const pair<int, int> a, const pair<int, int>b) {return a.first < b.first;});
+    for (int i = 0, j = num_arr.size() - 1; i < j;) {
+        if (num_arr[i].first + num_arr[j].first > target) {
+            -- j;
+        } else if (num_arr[i].first + num_arr[j].first < target) {
+            ++ i;
+        } else {
+            result.push_back(num_arr[i].second);
+            result.push_back(num_arr[j].second);
+            break;
+        }
+    }
+    return result;
+}
