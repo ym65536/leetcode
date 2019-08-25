@@ -1,26 +1,19 @@
-vector<vector<int>> threeSum(vector<int>& nums) 
-{
-    set<vector<int>> result;
-
-    sort(nums.begin(), nums.end());
-    for (int k = 0; k < (int)nums.size() - 2; k++)
-    {
-        int i = k + 1;
-        int j = nums.size() - 1;
-        while (i < j)
-        {
+vector<vector<int>> threeSum(vector<int>& nums) {
+    set<vector<int>> sums;
+    std::sort(nums.begin(), nums.end());
+    for (int i = 0; i < nums.size(); ++ i) {
+        for (int j = i + 1, k = nums.size() - 1; j < k; /**/) {
             int sum = nums[i] + nums[j] + nums[k];
-            if (sum == 0)
-            {
-                result.insert({nums[k], nums[i], nums[j]});
-                i++,j--;
+            if (sum > 0) {
+                -- k;
+            } else if (sum < 0) {
+                ++ j;
+            } else {
+                sums.insert({nums[i], nums[j], nums[k]});
+                ++ j;
+                -- k;
             }
-            else if (sum < 0)
-                i++;
-            else
-                j--;
         }
     }
-
-    return vector<vector<int>>(result.begin(), result.end());
+    return vector<vector<int>>(sums.begin(), sums.end());
 }
