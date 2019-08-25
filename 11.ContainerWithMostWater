@@ -1,16 +1,14 @@
-int maxArea(vector<int>& height) 
-{
+// if h[i] < h[j], then area (h[i] -> h[i, j - 1]) must smaller than h[i, j] 
+int maxArea(vector<int>& height) {
     int result = 0;
-// if h[i] < h[j], then h[i, j - 1] must be less than h[i, j]
-    for (int i = 0, j = height.size() - 1; i < j;)
-    {
-        int tmp = min(height[i], height[j]) * (j - i);
-        result = max(result, tmp);
-        if (height[i] < height[j])
-            i++;
-        else
-            j--;
+    for (int i = 0, j = height.size() - 1; i < j; /*nothing*/) {
+        auto area = min(height[j], height[i]) * (j - i);
+        result = max(area, result);
+        if (height[i] < height[j]) {
+            ++ i;
+        } else {
+            -- j;
+        }
     }
-
     return result;
 }
