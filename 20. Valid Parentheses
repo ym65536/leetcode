@@ -1,0 +1,32 @@
+bool isValid(string s) {
+    stack<char> stk;
+    for (auto c : s) {
+        switch (c) {
+        case '(':
+        case '[':
+        case '{':
+            stk.push(c);
+            break;
+        case ')':
+        case ']':
+        case '}':
+            if (stk.empty()) {
+                return false;
+            }
+            if (c == ')' && stk.top() != '(') {
+                return false;
+            }
+            if (c == ']' && stk.top() != '[') {
+                return false;
+            }
+            if (c == '}' && stk.top() != '{') {
+                return false;
+            }
+            stk.pop();
+            break;
+        default:
+            break;
+        }
+    }
+    return stk.empty();
+}
