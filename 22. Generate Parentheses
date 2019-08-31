@@ -1,24 +1,23 @@
-vector<string> generateParenthesis(int n) 
-{
+vector<string> generateParenthesis(int n) {
     vector<string> result;
-    dfs(result, "", n, n);
-
+    string solution;
+    dfs(result, solution, n, n);
     return result;
 }
 
-void dfs(vector<string>& result, string item, int left, int right)
-{
-    if (left == 0 && right == 0)
-    {
-        result.push_back(item);
+void dfs(vector<string>& result, string& solution, int left, int right) {
+    if (left == 0 &&  right == 0) {
+        result.push_back(solution);
         return;
     }
-    if (left > 0)
-    {
-        dfs(result, item + "(", left - 1, right);
+    if (left > 0) {
+        solution += "(";
+        dfs(result, solution, left - 1, right);
+        solution.pop_back();
     }
-    if (right > left)
-    {
-        dfs(result, item + ")", left, right - 1);
+    if (right > left) {
+        solution += ")";
+        dfs(result, solution, left, right - 1);
+        solution.pop_back();
     }
 }
