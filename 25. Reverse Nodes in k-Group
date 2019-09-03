@@ -1,0 +1,29 @@
+ListNode* reverseKGroup(ListNode* head, int k) {
+    ListNode dummy(INT_MIN);
+    dummy.next = head;
+    ListNode* prev = &dummy;
+    ListNode* visit = prev->next;
+    int idx = 0;
+    while (visit != nullptr) {
+        ++ idx;
+        if (idx % k == 0) {
+            prev = reverseList(prev, visit->next);
+            visit = prev->next;
+        } else {
+            visit = visit->next;
+        }
+    }
+    return dummy.next;
+}
+
+// reverse list range (prev, next), exclude prev and next
+ListNode* reverseList(ListNode* prev, ListNode* next) {
+    ListNode* last = prev->next;
+    while (last->next != next) {
+        ListNode* node = last->next;
+        last->next = node->next;
+        node->next = prev->next;
+        prev->next = node;
+    }
+    return last;
+}
