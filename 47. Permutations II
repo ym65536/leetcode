@@ -1,0 +1,27 @@
+vector<vector<int>> permuteUnique(vector<int>& nums) {
+    vector<vector<int>> result;
+    vector<int> solution;
+    unordered_map<int, int> filter;
+    for (auto num : nums) {
+        ++ filter[num];
+    }
+    backtrace(result, solution, nums.size(), filter);
+    return result;
+}
+
+void backtrace(vector<vector<int>>& result, vector<int>& solution, int n, unordered_map<int, int>& filter) {
+    if (solution.size() == n) {
+        result.push_back(solution);
+        return;
+    }
+    for (auto& item : filter) {
+        if (item.second <= 0) { // accessed
+            continue;
+        }
+        -- item.second;
+        solution.push_back(item.first);
+        backtrace(result, solution, n, filter);
+        solution.pop_back();
+        ++ item.second;
+    }
+}
