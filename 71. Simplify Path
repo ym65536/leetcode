@@ -1,28 +1,36 @@
-
-string simplifyPath(string path) 
-{
-    string result;
-    stringstream ss;
-    ss.str(path);
-    vector<string> vs;
-
-    string dir;
-    while (getline(ss, dir, '/'))
-    {
-        if (dir == "." || dir == "")
+string simplifyPath(string path) {
+    vector<string> docs;
+    stringSplit(path, '/', &docs);
+    vector<string> vdoc;
+    for (const auto& item : docs) {
+        if (item == ".") {
             continue;
-        if (dir == "..")
-        {
-            if (!vs.empty()) 
-                vs.pop_back();
-        }
-        else
-        {
-            vs.push_back(dir);
+        } else if (item == "..") {
+            if (!vdoc.empty()) {
+                vdoc.pop_back();
+            }
+        } else {
+            vdoc.push_back(item);
         }
     }
+    string result = "/";
+    for (const auto& item : vdoc) {
+        result += item + "/";
+    }
+    if (!vdoc.empty()) {
+        result.pop_back();
+    }
+    return result;
+}
 
-    for (string dir : vs)
-        result += "/" + dir;
-    return result.empty() ? "/" : result;
+void stringSplit(const string& path, char delim, vector<string>* splits) {
+    stringstream ss;
+    ss.str(path);
+    string item;
+    while (getline(ss, item, delim)) {
+        if (item.empty()) {
+            continue;
+        }
+        splits->push_back(item);
+    }
 }
