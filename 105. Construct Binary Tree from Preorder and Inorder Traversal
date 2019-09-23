@@ -1,26 +1,21 @@
 TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-    if (preorder.size() != inorder.size() || preorder.size() == 0) {
-        return NULL;
-    }
-    TreeNode* root = dfs(preorder, 0, preorder.size() - 1, inorder, 0, inorder.size() - 1);
-    return root;
+    return dfs(preorder, 0, preorder.size() - 1, inorder, 0, inorder.size() - 1);
 }
 
-TreeNode* dfs(vector<int>& preorder, int ps, int pr, vector<int>& inorder, int is, int ir) {
-    if (ps > pr) {
-        return NULL;
+TreeNode* dfs(const vector<int>& preorder, int pl, int pr, const vector<int>& inorder, int il, int ir) {
+    if (pl > pr) {
+        return nullptr;
     }
-    TreeNode* root = new TreeNode(preorder[ps]);
-    int povit = 0;
-    for (int i = is; i <= ir; i++) {
-        if (inorder[i] == preorder[ps]) {
-            povit = i;
+    int rval = preorder[pl];
+    int left_size = 0;
+    int rpos = il;
+    for (; rpos < ir; ++ rpos, ++ left_size) {
+        if (inorder[rpos] == rval) {
             break;
         }
     }
-    int left_size = povit - is;
-    int right_size = ir - povit;
-    root->left = dfs(preorder, ps + 1, ps + left_size, inorder, is, povit - 1);
-    root->right = dfs(preorder, pr - right_size + 1, pr, inorder, povit + 1, ir);
+    TreeNode* root = new TreeNode(rval);
+    root->left = dfs(preorder, pl + 1,  pl + left_size, inorder, il, rpos - 1);
+    root->right = dfs(preorder, pl + left_size + 1, pr, inorder, rpos + 1, ir);
     return root;
 }
