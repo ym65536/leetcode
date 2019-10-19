@@ -1,0 +1,21 @@
+int evalRPN(vector<string>& tokens) {
+    unordered_map<string, function<int(int, int)>> fmap = {
+        {"+", [](int a, int b) { return a + b; } },
+        {"-", [](int a, int b) { return a - b; } },
+        {"*", [](int a, int b) { return a * b; } },
+        {"/", [](int a, int b) { return a / b; } }
+    };
+    stack<int> vals;
+    for (const auto& token : tokens) {
+        if (fmap.count(token)) {
+            auto op1 = vals.top();
+            vals.pop();
+            auto op2 = vals.top();
+            vals.pop();
+            vals.push(fmap[token](op2, op1));
+        } else {
+            vals.push(stoi(token));
+        }
+    }
+    return vals.top();
+}
