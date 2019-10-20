@@ -1,0 +1,16 @@
+int findMin(vector<int>& nums) {
+    int left = 0; 
+    int right = nums.size() - 1;
+    while (left < right) {
+        int mid = (left + right) / 2;
+        if (mid == left) {
+            return min(nums[left], nums[right]);
+        }
+        if (nums[mid] > nums[right]) {
+            left = mid;
+        } else {
+            right = mid;
+        }
+    }
+    return nums[left];
+}
