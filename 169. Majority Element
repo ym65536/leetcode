@@ -1,0 +1,20 @@
+int majorityElement(vector<int>& nums) {
+    for (int i = 0, j = 1; j < nums.size(); ) {
+        while (nums[i] == INT_MIN) {
+            ++ i;
+        }
+        if (nums[i] != nums[j]) {
+            nums[i] = nums[j] = INT_MIN;
+            ++ i;
+            ++ j;
+        } else {
+            ++ j;
+        }
+    }
+    for (const auto item : nums) {
+        if (item != INT_MIN) {
+            return item;
+        }
+    }
+    return INT_MIN;
+}
