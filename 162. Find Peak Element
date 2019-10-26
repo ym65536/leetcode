@@ -13,6 +13,5 @@ int findPeakElement(vector<int>& nums) {
             right = mid;
         }
     }
-
     return left;
 }
