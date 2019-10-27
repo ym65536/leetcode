@@ -1,0 +1,33 @@
+class BSTIterator {
+public:
+    BSTIterator(TreeNode* root) {
+        iter_ = root;
+    }
+    
+    /** @return the next smallest number */
+    int next() {
+        int value = 0;
+        while (hasNext()) {
+            if (iter_) {
+                nodes_.push(iter_);
+                iter_ = iter_->left;
+            } else {
+                iter_ = nodes_.top();
+                nodes_.pop();
+                value = iter_->val;
+                iter_ = iter_->right;
+                break;
+            }
+        }
+        return value;
+    }
+    
+    /** @return whether we have a next smallest number */
+    bool hasNext() {
+        return (!nodes_.empty() || iter_);    
+    }
+    
+private:
+    TreeNode* iter_;
+    stack<TreeNode*> nodes_;
+};
