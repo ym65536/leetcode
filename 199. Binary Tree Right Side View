@@ -1,28 +1,26 @@
 vector<int> rightSideView(TreeNode* root) {
-    queue<TreeNode*> nodes;
-    TreeNode* visit = root;
     vector<int> result;
-    if (visit) {
-        nodes.push(visit);
+    queue<TreeNode*> nodes;
+    if (root) {
+        nodes.push(root);
     }
-    int level_current = 1;
-    int level_next = 0;
+    int cur_line_nodes = 1;
+    int next_line_nodes = 0;
     while (!nodes.empty()) {
-        visit = nodes.front();
+        TreeNode* node = nodes.front();
         nodes.pop();
-        -- level_current;
-        if (visit->left) {
-            nodes.push(visit->left);
-            ++ level_next;
+        if (node->left) {
+            ++ next_line_nodes;
+            nodes.push(node->left);
         }
-        if (visit->right) {
-            nodes.push(visit->right);
-            ++ level_next;
+        if (node->right) {
+            ++ next_line_nodes;
+            nodes.push(node->right);
         }
-        if (level_current == 0) {
-            level_current = level_next;
-            result.push_back(visit->val);
-            level_next = 0;
+        if (--cur_line_nodes == 0) {
+            result.push_back(node->val);
+            cur_line_nodes = next_line_nodes;
+            next_line_nodes = 0;
         }
     }
     return result;
