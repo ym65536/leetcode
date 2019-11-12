@@ -1,29 +1,32 @@
-bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) {
-    vector<vector<int>> graph(numCourses, vector<int>());
-    queue<int> nodes;
-    vector<int> indegrees(numCourses, 0);
-    int visit_node_size = 0;
-
-    for (auto item : prerequisites) {
-        graph[item.first].push_back(item.second);
-        ++ indegrees[item.second];
-    }
-    for (int node_id = 0; node_id < indegrees.size(); ++ node_id) {
-        if (indegrees[node_id] == 0) {
-            nodes.push(node_id);
-        }
-    }
-    while (!nodes.empty()) {
-        ++ visit_node_size;
-        int node_id = nodes.front();
-        nodes.pop();
-        for (auto neighber_id : graph[node_id]) {
-            -- indegrees[neighber_id];
-            if (indegrees[neighber_id] == 0) {
-                nodes.push(neighber_id);
+bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<int> result;
+        // first, construct the graph
+        vector<int> indegree(numCourses, 0);
+        vector<vector<int>> graph(numCourses, vector<int>());
+        for (const auto& item : prerequisites) {
+            auto node = item[0];
+            auto peer = item[1];
+            ++ indegree[peer];
+            graph[node].push_back(peer);
+        }       
+        // find all start node
+        queue<int> prenodes;
+        for (int node = 0; node < numCourses; ++ node) {
+            if (indegree[node] == 0) {
+                prenodes.push(node);
             }
         }
-    }
-
-    return visit_node_size == numCourses;
+        // start algorithm
+        while (!prenodes.empty()) {
+            auto node = prenodes.front();
+            prenodes.pop();
+            result.push_back(node);
+            for (auto peer : graph[node]) {
+                -- indegree[peer];
+                if (indegree[peer] == 0) {
+                    prenodes.push(peer);
+                }
+            }
+        }
+        return result.size() == numCourses;
     }
