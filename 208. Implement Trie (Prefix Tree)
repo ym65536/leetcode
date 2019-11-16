@@ -1,54 +1,53 @@
-struct TrieNode {
-    shared_ptr<TrieNode> child[26] = {nullptr};
-    bool last = false;
-};
-
 class Trie {
 public:
+    struct TrieNode {
+        TrieNode* nodes[26] = {nullptr};
+        bool leaf = false;
+    };
+    
     /** Initialize your data structure here. */
     Trie() {
-        root = make_shared<TrieNode>();
+        root_ = new TrieNode();
     }
     
     /** Inserts a word into the trie. */
     void insert(string word) {
-        shared_ptr<TrieNode> tnode = root; 
-        for (auto ch : word) {
-            int index = ch - 'a';
-            if (tnode->child[index] == nullptr) {
-                tnode->child[index] = make_shared<TrieNode>();
-            }
-            tnode = tnode->child[index];
+        TrieNode* tn = root_;
+        for (auto c : word) {
+            c -= 'a';
+            if (tn->nodes[c] == nullptr) {
+                tn->nodes[c] = new TrieNode();
+            } 
+            tn = tn->nodes[c];
         }
-        tnode->last = true;
+        tn->leaf = true;
     }
     
     /** Returns if the word is in the trie. */
     bool search(string word) {
-        shared_ptr<TrieNode> tnode = root; 
-        for (auto ch : word) {
-            int index = ch - 'a';
-            if (tnode->child[index] == nullptr) {
+        TrieNode* tn = root_;
+        for (auto c : word) {
+            c -= 'a';
+            if (tn->nodes[c] == nullptr) {
                 return false;
             }
-            tnode = tnode->child[index];
-        } 
-        return tnode->last;
+            tn = tn->nodes[c];
+        }
+        return tn->leaf;
     }
     
     /** Returns if there is any word in the trie that starts with the given prefix. */
     bool startsWith(string prefix) {
-       shared_ptr<TrieNode> tnode = root; 
-        for (auto ch : prefix) {
-            int index = ch - 'a';
-            if (tnode->child[index] == nullptr) {
+        TrieNode* tn = root_;
+        for (auto c : prefix) {
+            c -= 'a';
+            if (tn->nodes[c] == nullptr) {
                 return false;
             }
-            tnode = tnode->child[index];
-        } 
-        return true; 
+            tn = tn->nodes[c];
+        }
+        return true;
     }
-    
 private:
-    shared_ptr<TrieNode> root;
+    TrieNode* root_ = nullptr;
 };
