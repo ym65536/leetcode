@@ -12,10 +12,7 @@ public:
     
     /** Removes the element on top of the stack and returns that element. */
     int pop() {
-        while (q1.size() > 1) {
-            q2.push(q1.front());
-            q1.pop();
-        }
+        trick();
         int value = q1.front();
         q1.pop();
         q1.swap(q2);
@@ -24,10 +21,7 @@ public:
     
     /** Get the top element. */
     int top() {
-        while (q1.size() > 1) {
-            q2.push(q1.front());
-            q1.pop();
-        }
+        trick();
         return q1.front();
     }
     
@@ -35,8 +29,13 @@ public:
     bool empty() {
         return q1.empty() && q2.empty();
     }
-    
-  private:
+private:
+    void inline trick() {
+        while (q1.size() > 1) {
+            q2.push(q1.front());
+            q1.pop();
+        }
+    }
     queue<int> q1;
     queue<int> q2;
 };
