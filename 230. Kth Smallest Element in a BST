@@ -1,21 +1,20 @@
 int kthSmallest(TreeNode* root, int k) {
-    stack<TreeNode*> nodes;
-    TreeNode* visit = root;
-
-    int count = 0;
-    while (!nodes.empty() || (visit != nullptr)) {
-        if (visit != nullptr) {
-            nodes.push(visit);
-            visit = visit->left;
-        } else {
-            visit = nodes.top();
-            nodes.pop();
-            if (++count == k) {
-                return visit->val;
-            }
-            visit = visit->right;
-        }
-    }
-
-    return -1;
+	stack<TreeNode*> nodes;
+	TreeNode* visit = root;
+	int count = 0;    
+	while (!nodes.empty() || visit != nullptr) {
+		if (visit != nullptr) {
+			nodes.push(visit);
+			visit = visit->left;
+		} else {
+			visit = nodes.top();
+			nodes.pop();
+			++ count;
+			if (count == k) {
+				return visit->val;
+			}
+			visit = visit->right;
+		}
+	}
+	return -1;
 }
