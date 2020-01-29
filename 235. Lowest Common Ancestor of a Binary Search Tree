@@ -1,0 +1,11 @@
+TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+    int min_val = std::min(p->val, q->val);
+    int max_val = std::max(p->val, q->val);
+    if (min_val > root->val) {
+        return lowestCommonAncestor(root->right, p, q);
+    } else if (max_val < root->val) {
+        return lowestCommonAncestor(root->left, p, q);
+    } else {
+        return root;
+    }
+}
