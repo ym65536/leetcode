@@ -1,0 +1,25 @@
+bool isPalindrome(ListNode* head) {
+    ListNode* slow = head;
+    ListNode* fast = head;
+    ListNode dummy(INT_MIN);
+    ListNode* resv = &dummy;
+    while (fast && fast->next) {
+        fast = fast->next->next;
+        resv = slow;
+        slow = slow->next;
+        resv->next = dummy.next;
+        dummy.next = resv;
+    }
+    if (fast) {
+        slow = slow->next;
+    }
+    resv = dummy.next;
+    while (resv) {
+        if (resv->val != slow->val) {
+            return false;
+        } 
+        resv = resv->next;
+        slow = slow->next;
+    }
+    return true;
+}
