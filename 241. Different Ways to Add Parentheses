@@ -1,24 +1,28 @@
 vector<int> diffWaysToCompute(string input) {
-    vector<int> result;
-    for (int i = 0; i < input.size(); ++i) {
-        char c = input[i];
-        if (c == '+' || c == '-' || c == '*') {
-            vector<int> left = diffWaysToCompute(input.substr(0, i));
-            vector<int> right = diffWaysToCompute(input.substr(i + 1));
-            for (auto lv : left) {
-                for (auto rv : right) {
-                    if (c == '+') 
-                        result.push_back(lv + rv);
-                    else if (c == '-') 
-                        result.push_back(lv - rv);
-                    else 
-                        result.push_back(lv * rv);       
-                }
-            }
-        }
-    }
-    if (result.empty()) {
-        result.push_back(stoi(input));
-    }
-    return result;
+	vector<int> result;
+	for (int i = 0; i < input.size(); ++ i) {
+		if (input[i] == '+' || input[i] == '-' || input[i] == '*') {
+			auto left = diffWaysToCompute(input.substr(0, i));
+			auto right = diffWaysToCompute(input.substr(i + 1));
+			for (const auto& l : left) {
+				for (const auto& r : right) {
+					result.push_back(OPERATOR(l, input[i], r));
+				}
+			}
+		}
+	}
+	if (!input.empty() && result.empty()) { // no operator
+		result.push_back(std::stoi(input.c_str()));
+	}
+	return result;
+}
+
+inline int OPERATOR(int l, char op, int r) {
+	if (op == '+') {
+		return l + r;
+	} else if (op == '-') {
+		return l - r;
+	} else {
+		return l * r;
+	}
 }
