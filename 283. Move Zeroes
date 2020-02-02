@@ -1,0 +1,12 @@
+void moveZeroes(vector<int>& nums) {
+    int last_valid_idx = 0;
+    for (int i = 0; i < nums.size(); ++ i) {
+        if (nums[i] != 0) {
+            nums[last_valid_idx] = nums[i];
+            ++ last_valid_idx;
+        }
+    }
+    for (; last_valid_idx < nums.size(); ++ last_valid_idx) {
+        nums[last_valid_idx] = 0;
+    }
+}
