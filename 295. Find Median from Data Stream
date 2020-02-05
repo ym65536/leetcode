@@ -6,27 +6,23 @@ public:
     }
     
     void addNum(int num) {
-        low_half.push(num);
-        high_half.push(low_half.top());
-        low_half.pop();
-        if (low_half.size() < high_half.size()) {
-            low_half.push(high_half.top());
-            high_half.pop();
+        high.push(num);
+        low.push(high.top());
+        high.pop();
+        while (high.size() < low.size()) {
+            high.push(low.top());
+            low.pop();
         }
     }
     
     double findMedian() {
-        return low_half.size() > high_half.size() ? 
-            low_half.top() * 1.0 : (low_half.top() + high_half.top()) / 2.0;
+        if (low.size() == high.size()) {
+            return (low.top() + high.top()) / 2.0;
+        } else {
+            return high.top();
+        }
     }
 private:
-    priority_queue<int> high_half;
-    priority_queue<int, vector<int>, greater<int>> low_half;
+    priority_queue<int> low; // greater heap
+    priority_queue<int, vector<int>, greater<int>> high; // less heap
 };
-
-/**
- * Your MedianFinder object will be instantiated and called as such:
- * MedianFinder obj = new MedianFinder();
- * obj.addNum(num);
- * double param_2 = obj.findMedian();
- */
