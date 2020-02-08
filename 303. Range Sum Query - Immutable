@@ -1,0 +1,15 @@
+class NumArray {
+public:
+    NumArray(vector<int>& nums) {
+        presum_.resize(nums.size() + 1, 0);
+        for (int i = 0; i < nums.size(); ++ i) {
+            presum_[i + 1] = presum_[i] + nums[i];
+        }
+    }
+    
+    int sumRange(int i, int j) {
+        return presum_[j + 1] - presum_[i];
+    }
+private:
+    vector<int> presum_;
+};
