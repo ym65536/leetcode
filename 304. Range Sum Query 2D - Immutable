@@ -1,0 +1,23 @@
+class NumMatrix {
+public:
+    NumMatrix(vector<vector<int>>& matrix) {
+        auto row = matrix.size();
+        if (row == 0) {
+            return;
+        }
+        auto col = matrix[0].size();
+        vector<vector<int>> presum(row + 1, vector<int>(col + 1, 0));
+        for (int i = 0; i < row; ++ i) {
+            for (int j = 0; j < col; ++ j) {
+                presum[i + 1][j + 1] = presum[i][j + 1] + presum[i + 1][j] - presum[i][j] + matrix[i][j];
+            }
+        }
+        presum_.swap(presum);
+    }
+    
+    int sumRegion(int row1, int col1, int row2, int col2) {
+        return presum_[row2 + 1][col2 + 1] - presum_[row2 + 1][col1] - presum_[row1][col2 + 1] + presum_[row1][col1];
+    }
+private:
+    vector<vector<int>> presum_;
+};
