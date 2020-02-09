@@ -1,0 +1,27 @@
+class NumArray {
+public:
+    NumArray(vector<int>& nums) {
+        presum_.resize(nums.size() + 1, 0);
+        nums_.resize(nums.size());
+        for (int i = 0; i < nums.size(); ++ i) {
+            presum_[i + 1] = presum_[i] + nums[i];
+            nums_[i] = nums[i];
+        }
+    }
+    
+    void update(int i, int val) {
+        int diff = (val - nums_[i]);
+        for (int k = i + 1; k < presum_.size(); ++ k) {
+            presum_[k] += diff;
+        }
+        nums_[i] = val;
+    }
+    
+    int sumRange(int i, int j) {
+        return presum_[j + 1] - presum_[i];
+    }
+    
+private:
+    vector<int> presum_;
+    vector<int> nums_;
+};
