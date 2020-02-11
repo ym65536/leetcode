@@ -1,0 +1,39 @@
+class Foo {
+public:
+    Foo(): flag_(0) {   
+    }
+
+    void first(function<void()> printFirst) {
+        unique_lock<mutex> lock(mu_);
+        cv_.wait(lock, [this] {return (flag_ & 0x01) == 0;});
+        // printFirst() outputs "first". Do not change or remove this line.
+        printFirst();
+        flag_ |= 0x1;
+        lock.unlock();
+        cv_.notify_all();
+    }
+
+    void second(function<void()> printSecond) {
+        unique_lock<mutex> lock(mu_);
+        cv_.wait(lock, [this] {return (flag_ & 0x01) == 1;});
+        // printSecond() outputs "second". Do not change or remove this line.
+        printSecond();
+        flag_ |= 0x2;
+        lock.unlock();
+        cv_.notify_all();
+    }
+
+    void third(function<void()> printThird) {
+        unique_lock<mutex> lock(mu_);
+        cv_.wait(lock, [this] {return (flag_ & 0x03) == 0x03;});
+        // printThird() outputs "third". Do not change or remove this line.
+        printThird();
+        flag_ |= 0x4;
+        lock.unlock();
+        cv_.notify_all();
+    }
+private:
+    mutex mu_;
+    condition_variable cv_;
+    uint32_t flag_;
+};
