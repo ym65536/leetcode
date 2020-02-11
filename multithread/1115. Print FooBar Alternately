@@ -1,0 +1,33 @@
+class FooBar {
+private:
+    int count_;
+    condition_variable cv_;
+    mutex mu_;
+    uint32_t flag_ = 0;
+    
+public:
+    FooBar(int n): count_(n) {
+    }
+
+    void foo(function<void()> printFoo) {
+        for (int i = 0; i < count_; i++) {
+            unique_lock<mutex> lock(mu_);
+            cv_.wait(lock, [this] { return flag_ == 0;});
+        	// printFoo() outputs "foo". Do not change or remove this line.
+        	printFoo();
+            ++ flag_;
+            cv_.notify_one();
+        }
+    }
+
+    void bar(function<void()> printBar) {    
+        for (int i = 0; i < count_; i++) {
+            unique_lock<mutex> lock(mu_);
+            cv_.wait(lock, [this] { return flag_ == 1;});
+        	// printBar() outputs "bar". Do not change or remove this line.
+        	printBar();
+            -- flag_;
+            cv_.notify_one();
+        }
+    }
+};
