@@ -1,0 +1,42 @@
+class ZeroEvenOdd {
+private:
+    int count_;
+    condition_variable cv_;
+    mutex mu_;
+    uint32_t flags_;
+    
+public:
+    ZeroEvenOdd(int n): count_(n), flags_(0) {
+    }
+
+    // printNumber(x) outputs "x", where x is an integer.
+    void zero(function<void(int)> printNumber) {
+        for (int i = 1; i <= count_; ++ i) {
+            unique_lock<mutex> lock(mu_);
+            cv_.wait(lock, [this] { return (flags_ % 2) == 0;});
+            printNumber(0);
+            ++ flags_;
+            cv_.notify_all();
+        }
+    }
+
+    void even(function<void(int)> printNumber) {
+        for (int i = 2; i <= count_; i += 2) {
+            unique_lock<mutex> lock(mu_);
+            cv_.wait(lock, [this] { return ((flags_ % 2) == 1) && ((flags_ + 1) / 2 % 2 == 0);});
+            printNumber((flags_ + 1) / 2);
+            ++ flags_;
+            cv_.notify_all();
+        }
+    }
+
+    void odd(function<void(int)> printNumber) {
+        for (int i = 1; i <= count_; i +=2) {
+            unique_lock<mutex> lock(mu_);
+            cv_.wait(lock, [this, i] { return ((flags_ % 2) == 1) && ((flags_ + 1) / 2 % 2 == 1);});
+            printNumber(i);
+            ++ flags_;
+            cv_.notify_all();
+        }
+    }
+};
