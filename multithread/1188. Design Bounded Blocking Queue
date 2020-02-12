@@ -118,3 +118,96 @@ private:
     std::condition_variable notFull_;
     boost::circular_buffer<T> ringbuffer;
 };
+
+/××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××/
+
+#include <iostream>
+#include <deque>
+#include <mutex>
+#include <condition_variable>
+#include <functional>
+#include <thread>
+#include <chrono>
+#include <cstdlib>
+#include <ctime>
+
+template<typename T>
+class Buffer
+{
+private:
+    static const int SIZE = 10;
+    std::deque<T> content;
+    std::mutex mtx;
+    std::condition_variable con_var;
+public:
+    Buffer() = default;
+    void add(const T &item) {
+        std::unique_lock<std::mutex> lck(mtx);
+        con_var.wait(lck, [this](){return content.size() < SIZE;});
+        content.push_back(item);
+        con_var.notify_all();
+    }
+
+    T remove() {
+        std::unique_lock<std::mutex> lck(mtx);
+        con_var.wait(lck, [this](){return content.size() > 0;});
+        T item = content.front();
+        content.pop_front();
+        con_var.notify_all();
+        return item;
+    }
+};
+
+template <typename T>
+class Producer
+{
+private:
+    Buffer<T> &buffer;
+public:
+    Producer(Buffer<T> &b) : buffer(b) {}
+    void run(std::function<T()> produce) {
+        while(true) {
+            T item = produce();
+            buffer.add(item);
+            std::cout << "Produced " << item << std::endl;
+        }
+    }
+};
+
+template <typename T>
+class Consumer
+{
+private:
+    Buffer<T> &buffer;
+public:
+    Consumer(Buffer<T> &b) : buffer(b) {}
+    void run(std::function<void(T &)> consume) {
+        while(true) {
+            T item = buffer.remove();
+            consume(item);
+            std::cout << "Consumed " << item << std::endl;
+        }
+    }
+};
+
+int main()
+{
+    Buffer<int> buffer;
+    Producer<int> producer(buffer);
+    Consumer<int> consumer(buffer);
+
+    std::srand(std::time(nullptr));
+
+    std::thread producer_thread(&Producer<int>::run, &producer, [](){
+        std::this_thread::sleep_for(std::chrono::seconds(1 + std::rand() % 3));
+        int item = std::rand() % 100;
+        return item;
+    });
+
+    std::thread consumer_thread(&Consumer<int>::run, &consumer, [](int &x){
+        std::this_thread::sleep_for(std::chrono::seconds(1 + std::rand() % 3));
+    });
+
+    producer_thread.join();
+    consumer_thread.join();
+}
