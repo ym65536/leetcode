@@ -1,0 +1,29 @@
+class H2O {
+public:
+    H2O() {
+        
+    }
+
+    void hydrogen(function<void()> releaseHydrogen) {
+        unique_lock<mutex> lock(mu_);
+        cv_.wait(lock, [this] { return hc_ < 2 * oc_ + 2;});
+        ++ hc_;
+        // releaseHydrogen() outputs "H". Do not change or remove this line.
+        releaseHydrogen();
+        cv_.notify_one();
+    }
+
+    void oxygen(function<void()> releaseOxygen) {
+        unique_lock<mutex> lock(mu_);
+        cv_.wait(lock, [this] { return oc_ * 2 <= hc_;});
+        ++ oc_;
+        // releaseOxygen() outputs "O". Do not change or remove this line.
+        releaseOxygen();
+        cv_.notify_one();
+    }
+private:
+    mutex mu_;
+    condition_variable cv_;
+    int hc_ = 0;
+    int oc_ = 0;
+};
