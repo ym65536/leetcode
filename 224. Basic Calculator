@@ -1,0 +1,83 @@
+class Solution {
+public:
+    int calculate(string s) {
+        auto rpn = RPNExp(s);
+        return evalRPN(rpn);
+    }
+    
+    bool priority(const string& op1, const string& op2) {
+        unordered_map<string, int> pri_map = {
+            {"*", 2}, 
+            {"/", 2},
+            {"-", 1},
+            {"+", 1},
+            {"(", 0},
+            {")", 0}, 
+        };
+        return pri_map[op1] <= pri_map[op2];
+    }
+        
+    vector<string> RPNExp(const string& s) {
+        vector<string> rpn;
+        stack<string> sflag;
+        int i = 0;
+        while (i < s.size()) {
+            if (s[i] == ' ') {
+                ++ i;
+                continue;
+            }
+            if (isdigit(s[i])) {
+                long long n = 0;
+                while (isdigit(s[i]) && i < s.size()) {
+                    n = n * 10 + (s[i] - '0');
+                    ++ i;
+                }
+                rpn.push_back(to_string(n));
+            } else {
+                if (s[i] == '(') {
+                    sflag.push("(");
+                } else if (s[i] == ')') {
+                    while (sflag.top() != "(") {
+                        rpn.push_back(sflag.top());
+                        sflag.pop();
+                    }
+                    sflag.pop();
+                } else {
+                    while (!sflag.empty() && priority(string(1, s[i]), sflag.top())) {
+                        rpn.push_back(sflag.top());
+                        sflag.pop();
+                    }
+                    sflag.push(string(1, s[i]));
+                }
+                ++ i;
+            }
+        }
+        while (!sflag.empty()) {
+            rpn.push_back(sflag.top());
+            sflag.pop();
+        }
+        return rpn;
+    }
+    
+    int evalRPN(vector<string>& tokens) {
+        unordered_map<string, function<int(int, int)>> fmap = {
+            {"+", [](int a, int b) { return a + b;} }, 
+            {"-", [](int a, int b) { return a - b;} },
+            {"*", [](int a, int b) { return a * b;} },
+            {"/", [](int a, int b) { return a / b;} },
+        };
+        stack<long long int> vals;
+        for (const auto& token : tokens) {
+            if (fmap.count(token)) {
+                auto op1 = vals.top();
+                vals.pop();
+                auto op2 = vals.top();
+                vals.pop();
+                vals.push(fmap[token](op2, op1));
+            } else {
+                vals.push(stoll(token));
+            }
+        }
+        return vals.top();
+    }
+};
