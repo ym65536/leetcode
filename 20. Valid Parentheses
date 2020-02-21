@@ -1,32 +1,19 @@
 bool isValid(string s) {
-    stack<char> stk;
-    for (auto c : s) {
-        switch (c) {
-        case '(':
-        case '[':
-        case '{':
-            stk.push(c);
-            break;
-        case ')':
-        case ']':
-        case '}':
-            if (stk.empty()) {
+    stack<char> store;
+    unordered_map<char, char> kvs = {
+        {')', '('},
+        {']', '['},
+        {'}', '{'},
+    };
+    for (const auto& c : s) {
+        if (c == '(' || c == '{' || c == '[') {
+            store.push(c);
+        } else {
+            if (store.empty() || store.top() != kvs[c]) {
                 return false;
             }
-            if (c == ')' && stk.top() != '(') {
-                return false;
-            }
-            if (c == ']' && stk.top() != '[') {
-                return false;
-            }
-            if (c == '}' && stk.top() != '{') {
-                return false;
-            }
-            stk.pop();
-            break;
-        default:
-            break;
+            store.pop();
         }
     }
-    return stk.empty();
+    return store.empty();
 }
