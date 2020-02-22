@@ -1,0 +1,29 @@
+ListNode* rotateRight(ListNode* head, int k) {
+    int len = listLen(head);
+    if (len == 0 || (k = (k % len)) == 0) {
+        return head;
+    }
+    ListNode dummy(-1);
+    dummy.next = head;
+    ListNode* prev = &dummy;
+    ListNode* fast = prev;
+    for (; k > 0; -- k) {
+        fast = fast->next;
+    }
+    while (fast->next != nullptr) {
+        fast = fast->next;
+        prev = prev->next;
+    }
+    dummy.next = prev->next;
+    fast->next = head;
+    prev->next = nullptr;
+    return dummy.next;;
+}
+
+int listLen(ListNode* head) {
+    int count = 0;
+    for (ListNode* p = head; p != nullptr; p = p->next) {
+        ++ count;
+    }
+    return count;
+}
