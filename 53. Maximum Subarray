@@ -1,0 +1,13 @@
+int maxSubArray(vector<int>& nums) {
+        int local_suffix = INT_MIN;
+        int max_suffix = INT_MIN;
+        for (int i = 0; i < nums.size(); ++ i) {
+            if (local_suffix <= 0) {
+                local_suffix = nums[i];
+            } else {
+                local_suffix = local_suffix + nums[i];
+            }
+            max_suffix = max(max_suffix, local_suffix);
+        }
+        return max_suffix;
+    }
