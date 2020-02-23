@@ -1,0 +1,26 @@
+vector<TreeNode*> generateTrees(int n) {
+    if (n < 1) {
+        return {};
+    }
+    return backtrace(1, n);
+}
+
+vector<TreeNode*> backtrace(int l, int r) {
+    vector<TreeNode*> store;
+    if (l > r) {
+        return {nullptr};
+    }
+    for (int i = l; i <= r; ++ i) {
+        auto ltrees = backtrace(l, i - 1);
+        auto rtrees = backtrace(i + 1, r);
+        for (const auto& ltree : ltrees) {
+            for (const auto& rtree : rtrees) {
+                TreeNode* root = new TreeNode(i);
+                root->left = ltree;
+                root->right = rtree;
+                store.push_back(root);
+            }
+        }
+    }
+    return store;
+}
