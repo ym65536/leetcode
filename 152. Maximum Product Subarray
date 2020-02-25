@@ -1,0 +1,14 @@
+int maxProduct(vector<int>& nums) {
+    if (nums.empty()) {
+        return 0;
+    }
+    vector<pair<int, int>> store(nums.size());
+    store[0] = {nums[0], nums[0]};
+    int result = nums[0];
+    for (int i = 1; i < nums.size(); ++ i) {
+        store[i].first = max(max(nums[i], nums[i] * store[i-1].first), nums[i] * store[i-1].second);
+        store[i].second = min(min(nums[i], nums[i] * store[i-1].second), nums[i] * store[i-1].first);
+        result = max(result, store[i].first);
+    }
+    return result;
+}
