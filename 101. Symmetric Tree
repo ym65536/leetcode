@@ -1,0 +1,12 @@
+bool isSymmetric(TreeNode* root) {
+    if (root == nullptr) {
+        return true;
+    }
+    return dfs(root->left, root->right);
+}
+bool dfs(TreeNode* l, TreeNode* r) {
+    if (l == nullptr || r == nullptr) {
+        return l == r;
+    }
+    return (l->val == r->val) && dfs(l->left, r->right) && dfs(l->right, r->left);
+}
