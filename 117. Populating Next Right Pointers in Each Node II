@@ -1,0 +1,23 @@
+Node* connect(Node* root) {
+    queue<Node*> store;
+    if (root != nullptr) {
+        store.push(root);
+    }
+    while (!store.empty()) {
+        int len = store.size();
+        for (int i = 0; i < len; ++ i) {
+            auto node = store.front();
+            store.pop();
+            if (i < len - 1) {
+                node->next = store.front();
+            }
+            if (node->left) {
+                store.push(node->left);
+            }
+            if (node->right) {
+                store.push(node->right);
+            }
+        }
+    }
+    return root;
+}
