@@ -1,12 +1,11 @@
-RandomListNode *copyRandomList(RandomListNode *head) {
-    unordered_map<RandomListNode*, RandomListNode*> node_map;
-    for (RandomListNode* pnode = head; pnode != nullptr; pnode = pnode->next) {
-        node_map[pnode] = new RandomListNode(pnode->label);
+Node* copyRandomList(Node* head) {
+    unordered_map<Node*, Node*> store;
+    for (auto node = head; node != nullptr; node = node->next) {
+        store[node] = new Node(node->val);
     }
-
-    for (RandomListNode* pnode = head; pnode != nullptr; pnode = pnode->next) {
-        node_map[pnode]->next = node_map[pnode->next];
-        node_map[pnode]->random = node_map[pnode->random];
+    for (auto node = head; node != nullptr; node = node->next) {
+        store[node]->next = store[node->next];
+        store[node]->random = store[node->random];
     }
-    return node_map[head];
+    return store[head];
 }
