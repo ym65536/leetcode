@@ -1,0 +1,18 @@
+int minimumTotal(vector<vector<int>>& triangle) {
+    if (triangle.empty()) {
+        return 0;
+    }
+    vector<vector<int>> store = triangle;
+    for (int i = 1; i < triangle.size(); ++ i) {
+        for (int j = 0; j < triangle[i].size(); ++ j) {
+            if (j == 0) {
+                store[i][j] += store[i - 1][j];
+            } else if (j == triangle[i].size() - 1) {
+                store[i][j] += store[i - 1][j - 1];
+            } else {
+                store[i][j] += min(store[i - 1][j - 1], store[i - 1][j]);
+            }
+        }
+    }
+    return *min_element(store.back().begin(), store.back().end());
+}
