@@ -1,0 +1,15 @@
+bool isBalanced(TreeNode* root) {
+    bool result = true;
+    dfs(root, result);
+    return result;
+}
+
+int dfs(TreeNode* root, bool& result) {
+    if (root == nullptr || result == false) {
+        return 0;
+    }
+    int ld = dfs(root->left, result);
+    int rd = dfs(root->right, result);
+    result = (abs(ld - rd) <= 1) && result;
+    return max(ld, rd) + 1;
+}
