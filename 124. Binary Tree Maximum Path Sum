@@ -1,0 +1,18 @@
+int maxPathSum(TreeNode* root) {
+    if (root == nullptr) {
+        return 0;
+    }
+    int result = root->val;
+    dfs(root, result);
+    return result;
+}
+
+int dfs(TreeNode* root, int& result) {
+    if (root == nullptr) {
+        return 0;
+    }
+    int left = max(0, dfs(root->left, result));
+    int right = max(0, dfs(root->right, result));
+    result = max(left + right + root->val, result);
+    return max(left, right) + root->val;
+}
