@@ -19,6 +19,5 @@ bool wordBreak(string s, vector<string>& wordDict) {
             }
         }
     }
-
     return table[s.size()];
 }
