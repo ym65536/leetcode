@@ -1,42 +1,41 @@
 class LRUCache {
 public:
-    LRUCache(int capacity): capacity_(capacity) {
+    LRUCache(int capacity): cap_(capacity) {
     }
     
     int get(int key) {
-        auto it = node_map_.find(key);
-        if (it == node_map_.end()) {
+        auto it = kvmap_.find(key);
+        if (it == kvmap_.end()) {
             return -1;
         }
-        const auto& node_it = it->second;
-        node_list_.push_front(make_pair(node_it->first, node_it->second));
-        node_list_.erase(node_it);
-        it->second = node_list_.begin();
-        return it->second->second;
+        auto& kv_iter = it->second;
+        kvlist_.splice(kvlist_.begin(), kvlist_, kv_iter);
+        it->second = kvlist_.begin();
+        return kv_iter->second;
     }
     
     void put(int key, int value) {
-        auto it = node_map_.find(key);
-        if (it == node_map_.end()) {
-            if (node_map_.size() >= capacity_) {
-                auto node = node_list_.back();
-                auto key = node.first;
-                node_list_.pop_back();
-                node_map_.erase(key);
-            }
-            node_list_.push_front(make_pair(key,value));
-            auto node_it = node_list_.begin();
-            node_map_.insert(make_pair(key, node_it));
+        auto it = kvmap_.find(key);
+        if (it != kvmap_.end()) {
+            auto& kv_iter = it->second;
+            kvlist_.splice(kvlist_.begin(), kvlist_, kv_iter);
+            it->second = kvlist_.begin();
+            kv_iter->second = value;
         } else {
-            auto& node_it = it->second;
-            node_list_.push_front(make_pair(node_it->first, value));
-            node_list_.erase(node_it);
-            it->second = node_list_.begin();
+            if (kvmap_.size() >= cap_) {
+                auto& invalid = kvlist_.back();
+                auto key = invalid.first;
+                kvlist_.pop_back();
+                kvmap_.erase(key);
+            }
+            kvlist_.push_front(make_pair(key, value));
+            kvmap_.insert(make_pair(key, kvlist_.begin()));
         }
     }
       
 private:
-    int capacity_;
-    list<pair<int, int>> node_list_;
-    unordered_map<int, list<pair<int, int>>::iterator> node_map_;
+    typedef list<pair<int, int>> KVList;
+    int cap_;
+    KVList kvlist_;
+    map<int, KVList::iterator> kvmap_;
 };
