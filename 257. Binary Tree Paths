@@ -1,5 +1,23 @@
 vector<string> binaryTreePaths(TreeNode* root) {
     vector<string> result;
+    string solution;
+    dfs(result, solution, root);
+    return result;
+}
+void dfs(vector<string>& result, string solution, TreeNode* root) {
+    if (root == nullptr) {
+        return;
+    }
+    if (!root->left && !root->right) {
+        result.push_back(solution + to_string(root->val));
+        return;
+    }
+    dfs(result, solution + to_string(root->val) + "->", root->left);
+    dfs(result, solution + to_string(root->val) + "->", root->right);
+}
+
+vector<string> binaryTreePaths(TreeNode* root) {
+    vector<string> result;
     if (root == nullptr) {
         return result;
     }
@@ -14,6 +32,5 @@ vector<string> binaryTreePaths(TreeNode* root) {
     if (result.empty()) {
         result.push_back(to_string(root->val));
     }
-
     return result;
-}    
+}
