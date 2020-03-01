@@ -1,0 +1,23 @@
+vector<int> postorderTraversal(TreeNode* root) {
+    stack<TreeNode*> store;
+    TreeNode* iter = root;
+    TreeNode* last_iter = nullptr;
+    vector<int> result;
+    while (!store.empty() || iter != nullptr) {
+        if (iter != nullptr) {
+            store.push(iter);
+            iter = iter->left;
+        } else {
+            iter = store.top();
+            if (iter->right == nullptr || iter->right == last_iter) {
+                last_iter = iter;
+                result.push_back(last_iter->val);
+                store.pop();
+                iter = nullptr;
+            } else {
+                iter = iter->right;
+            }
+        }
+    }
+    return result;
+}
