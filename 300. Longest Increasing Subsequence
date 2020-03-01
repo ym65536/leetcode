@@ -2,7 +2,7 @@ int lengthOfLIS(vector<int>& nums) {
     if (nums.empty()) {
         return 0;
     }
-    vector<int> lis(nums.size(), 1);
+    vector<int> lis(nums.size(), 1); // lis[k] means ended by kth element increase sequence
     for (int i = 0; i < nums.size(); ++ i) {
         for (int j = 0; j < i; ++ j) {
             if (nums[j] < nums[i] && lis[i] < lis[j] + 1) {
