@@ -1,24 +1,18 @@
 int countNodes(TreeNode* root) {
-    if (root == nullptr) {
-        return 0;
+    auto ld = depth(root, 0);
+    auto rd = depth(root, 1);
+    if (ld == rd) {
+        return (1 << ld) - 1;
+    } else {
+        return countNodes(root->left) + countNodes(root->right) + 1;
     }
-    int left = GetDepth(root, 0);
-    int right = GetDepth(root, 1);
-    if (left == right) { // full binary tree
-        return (1 << left) - 1;
-    } 
-    return  countNodes(root->left) + countNodes(root->right) + 1;
 }
 
-int GetDepth(TreeNode* root, int type) {
-    int depth = 0;
-    while (root) {
-        if (type == 0) {
-            root = root->left;
-        } else {
-            root = root->right;
-        }
-        ++ depth;
+int depth(TreeNode* root, int type) {
+    int high = 0;
+    while (root != nullptr) {
+        root = (type == 0) ? root->left : root->right;
+        ++ high;
     }
-    return depth;
+    return high;
 }
