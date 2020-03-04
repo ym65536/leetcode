@@ -1,31 +1,29 @@
-vector<int> findOrder(int numCourses, vector<pair<int, int>>& prerequisites) {
-    vector<vector<int>> graph(numCourses, vector<int>());
-    queue<int> nodes;
-    vector<int> indegrees(numCourses, 0);
-    int visit_node_size = 0;
+vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
     vector<int> result;
-
-    for (auto item : prerequisites) {
-        graph[item.second].push_back(item.first);
-        ++ indegrees[item.first];
+    vector<vector<int>> graph(numCourses, vector<int>());
+    vector<int> indegree(numCourses, 0);
+    queue<int> store;
+    for (const auto& item : prerequisites) {
+        auto prev = item[1];
+        auto curr = item[0];
+        graph[prev].push_back(curr);
+        ++ indegree[curr];
     }
-    for (int node_id = 0; node_id < indegrees.size(); ++ node_id) {
-        if (indegrees[node_id] == 0) {
-            nodes.push(node_id);
+    for (int node = 0; node < indegree.size(); ++ node) {
+        if (indegree[node] == 0) {
+            store.push(node);
         }
     }
-    while (!nodes.empty()) {
-        ++ visit_node_size;
-        int node_id = nodes.front();
-        nodes.pop();
-        result.push_back(node_id);
-        for (auto neighber_id : graph[node_id]) {
-            -- indegrees[neighber_id];
-            if (indegrees[neighber_id] == 0) {
-                nodes.push(neighber_id);
+    while (!store.empty()) {
+        auto node = store.front();
+        store.pop();
+        result.push_back(node);
+        for (const auto item : graph[node]) {
+            -- indegree[item];
+            if (indegree[item] == 0) {
+                store.push(item);
             }
         }
     }
-
-    return visit_node_size == numCourses ? result : vector<int>();
+    return result.size() == numCourses ? result : vector<int>();
 }
