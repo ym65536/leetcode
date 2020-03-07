@@ -17,7 +17,6 @@ vector<int> findMinHeightTrees(int n, vector<vector<int>>& edges) {
 			leafs.push_back(node);
 		}
 	}
-
 	int left = n;
 	while (left > 2) {
 		int leaf_size = leafs.size();
