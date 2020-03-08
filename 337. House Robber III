@@ -1,0 +1,15 @@
+int rob(TreeNode* root) {
+    auto result = recurse(root); // first： rob current  second: not rob current
+    return max(result.first, result.second);
+}
+pair<int, int> recurse(TreeNode* root) {
+    if (root == nullptr) {
+        return {0, 0};
+    }
+    auto left = recurse(root->left);
+    auto right = recurse(root->right);
+    pair<int, int> store;
+    store.first = root->val + left.second + right.second;
+    store.second = max(left.first, left.second) + max(right.first, right.second);
+    return store;
+}
