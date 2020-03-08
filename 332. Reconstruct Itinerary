@@ -1,0 +1,23 @@
+vector<string> findItinerary(vector<vector<string>>& tickets) {
+        map<string, multiset<string>> graph;
+        vector<string> result;
+        for (const auto& ticket : tickets) {
+            graph[ticket[0]].insert(ticket[1]);
+        }
+        stack<string> store;
+        store.push("JFK");
+        while (!store.empty()) {
+            auto from = store.top();
+            if (graph[from].empty()) {
+                result.push_back(from);
+                store.pop();
+            } else {
+                auto peer_it = graph[from].begin();
+                store.push(*peer_it);
+                graph[from].erase(peer_it);
+            }
+        }
+        std::reverse(result.begin(), result.end());
+        return result;
+    }
+};
