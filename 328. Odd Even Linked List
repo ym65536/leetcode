@@ -1,0 +1,24 @@
+ListNode* oddEvenList(ListNode* head) {
+    ListNode odd(-1);
+    ListNode even(-1);
+    odd.next = head;
+    ListNode* prev = &odd;
+    ListNode* iter = head;
+    ListNode* pe = &even;
+    int pos = 1;
+    while (iter) {
+        if (pos % 2 == 1) {
+            prev = iter;
+            iter = iter->next;
+        } else {
+            prev->next = iter->next;
+            pe->next = iter;
+            pe = pe->next;
+            pe->next = nullptr;
+            iter = prev->next;
+        }
+        ++ pos;
+    }
+    prev->next = even.next;
+    return odd.next;
+}
