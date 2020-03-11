@@ -1,0 +1,19 @@
+string frequencySort(string s) {
+    unordered_map<char, int> freqs;
+    for (const auto& c : s) {
+        ++ freqs[c];
+    }
+    map<int, vector<char>, greater<int>> store;
+    for (const auto& item : freqs) {
+        store[item.second].push_back(item.first);
+    }
+    string result;
+    for (const auto& item : store) {
+        auto freq = item.first;
+        for (const auto& c : item.second) {
+            string str(freq, c);
+            result += str;
+        }
+    }
+    return result;
+}
