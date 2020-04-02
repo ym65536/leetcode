@@ -1,28 +1,46 @@
-int myAtoi(string str) 
-{
+int myAtoi(string str)  {
     long long int result = 0;
     int flag = 1;
     int i = 0;
-
     i = str.find_first_not_of(' ');
     if (i == string::npos)
         return result;
-    if (str[i] == '-' || str[i] == '+')
-    {
+    if (str[i] == '-' || str[i] == '+') {
         flag = (str[i] == '-') ? -1 : 1;
         i++;
     }   
-    while (i < str.size() && isdigit(str[i]))
-    {
+    while (i < str.size() && isdigit(str[i])) {
         result = 10 * result + (str[i] - '0');
         i++;
-
         if ((flag * result) > INT_MAX)
             return INT_MAX;
         if ((flag * result) < INT_MIN)
             return INT_MIN;
     }   
     result *= flag;
-
     return (int)result;
+}
+
+public int myAtoi(String str) {
+    long result = 0;
+    int flag = 1;
+    int i = 0;
+    while (i < str.length() && str.charAt(i) == ' ') {
+        ++ i;
+    }
+    if (i < str.length() && (str.charAt(i) == '+' || str.charAt(i) == '-')) {
+        flag = (str.charAt(i) == '-') ? -1 : 1;
+        ++ i;
+    }
+    while (i < str.length() && Character.isDigit(str.charAt(i))) {
+        result = result * 10 + (str.charAt(i) - '0');
+        if (result * flag > Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        }
+        if (result * flag < Integer.MIN_VALUE) {
+            return Integer.MIN_VALUE;
+        }
+        ++ i;
+    }
+    return (int)result * flag;
 }
