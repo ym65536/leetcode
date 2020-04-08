@@ -1,0 +1,27 @@
+public int[] intersect(int[] nums1, int[] nums2) {
+    List<Integer> nums = new ArrayList<Integer>();
+    Map<Integer, Integer> store = new HashMap<Integer, Integer>();
+    for (int elem : nums1) {
+        if (store.containsKey(elem)) {
+            store.put(elem, store.get(elem) + 1);
+        } else {
+            store.put(elem, 1);
+        }
+    }
+    for (int elem : nums2) {
+        if (store.containsKey(elem)) {
+            nums.add(elem);
+            int count = store.get(elem);
+            if (count == 1) {
+                store.remove(elem);
+            } else {
+                store.put(elem, count - 1);
+            }
+        }
+    }
+    int [] result = new int[nums.size()];
+    for (int i = 0; i < nums.size(); ++ i) {
+        result[i] = nums.get(i);
+    }
+    return result;
+}
