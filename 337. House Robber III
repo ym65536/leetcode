@@ -13,3 +13,26 @@ pair<int, int> recurse(TreeNode* root) {
     store.second = max(left.first, left.second) + max(right.first, right.second);
     return store;
 }
+
+class Solution {
+    public int rob(TreeNode root) {
+        Pair result = backtrace(root);
+        return Math.max(result.first, result.second);
+    }
+    
+    Pair backtrace(TreeNode root) {
+        Pair kv = new Pair();
+        if(root == null) {
+            return kv;
+        }
+        Pair left = backtrace(root.left);
+        Pair right = backtrace(root.right);
+        kv.first = root.val + left.second + right.second;
+        kv.second = Math.max(left.first, left.second) + Math.max(right.first, right.second);
+        return kv;
+    }
+    public class Pair {
+        public int first = 0;
+        public int second = 0;
+    };
+}
