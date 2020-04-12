@@ -8,6 +8,20 @@ int coinChange(vector<int>& coins, int amount) {
             }
         }
     }
-
     return values[amount] == INT_MAX ? -1 : values[amount];
+}
+
+
+public int coinChange(int[] coins, int amount) {
+    int[] store = new int[amount + 1];
+    Arrays.fill(store, Integer.MAX_VALUE);
+    store[0] = 0;
+    for (int price = 1; price <= amount; ++ price) {
+        for (int j = 0; j < coins.length; ++ j) {
+            if (price >= coins[j] && store[price - coins[j]] != Integer.MAX_VALUE) {
+                store[price] = Math.min(store[price], store[price - coins[j]] + 1); 
+            }
+        }
+    }
+    return store[amount] == Integer.MAX_VALUE ? -1 : store[amount];
 }
