@@ -1,24 +1,39 @@
 bool isValidSerialization(string preorder) {
-        vector<string> vals;
-        split(preorder, ',', vals);
-        int capacity = 1;
-        for (auto val : vals) {
-            -- capacity;
-            if (capacity < 0) {
-                return false;
-            }
-            if (val != "#") {
-               capacity += 2; 
-            }
+    vector<string> vals;
+    split(preorder, ',', vals);
+    int capacity = 1;
+    for (auto val : vals) {
+        -- capacity;
+        if (capacity < 0) {
+            return false;
         }
-        return capacity == 0;
+        if (val != "#") {
+           capacity += 2; 
+        }
     }
+    return capacity == 0;
+}
+
+void split(const std::string &s, char delim, vector<string>& result) {
+    std::stringstream ss;
+    ss.str(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        result.push_back(item);
+    }
+}
     
-    void split(const std::string &s, char delim, vector<string>& result) {
-        std::stringstream ss;
-        ss.str(s);
-        std::string item;
-        while (std::getline(ss, item, delim)) {
-            result.push_back(item);
-        }
-    }
+public boolean isValidSerialization(String preorder) {
+  String[] nodes = preorder.split(",");
+  int store = 1;
+  for (String node : nodes) {
+      -- store;
+      if (store < 0) {
+          return false;
+      }
+      if (!node.equals("#")) {
+          store += 2;
+      }
+  }
+  return store == 0;
+}
