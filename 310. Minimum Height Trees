@@ -35,3 +35,45 @@ vector<int> findMinHeightTrees(int n, vector<vector<int>>& edges) {
 	result.insert(result.begin(), leafs.begin(), leafs.end());
 	return result;
 }
+
+public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+		List<Integer> result = new ArrayList<Integer>();
+		if (n == 1) {
+				return Arrays.asList(0);
+		}
+		List<List<Integer>> graph = new ArrayList<List<Integer>>();
+		for (int i = 0; i < n; ++ i) {
+				graph.add(new ArrayList<Integer>());
+		}
+		int[] degree = new int[n];
+		for (int[] edge : edges) {
+				graph.get(edge[0]).add(edge[1]);
+				graph.get(edge[1]).add(edge[0]);
+				degree[edge[0]] ++;
+				degree[edge[1]] ++;
+		}
+		Queue<Integer> store = new LinkedList<Integer>();
+		for (int node = 0; node < n; ++ node) {
+				if (degree[node] == 1) {
+						store.offer(node);
+				}
+		}
+		int left = n;
+		while (left > 2) {
+				int size = store.size();
+				for (int i = 0; i < size; ++ i) {
+						int node = store.poll();
+						for (int peer : graph.get(node)) {
+								-- degree[peer];
+								if (degree[peer] == 1) {
+										store.offer(peer);
+								}
+						}
+				}
+				left -= size;
+		}
+		for (int elem : store) {
+				result.add(elem);
+		}
+		return result;
+}
