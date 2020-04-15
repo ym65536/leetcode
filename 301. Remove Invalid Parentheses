@@ -43,3 +43,53 @@ bool valid(const string& str) {
     }
     return store == 0;
 }
+
+
+class Solution {
+    public List<String> removeInvalidParentheses(String s) {
+        Set<String> visited = new HashSet<String>();
+        visited.add(s);
+        Queue<String> store = new LinkedList<String>();
+        store.offer(s);
+        List<String> result = new ArrayList<String>();
+        boolean find = false;
+        while (!store.isEmpty()) {
+            String ts = store.poll();
+            if (isValid(ts)) {
+                result.add(ts);
+                find = true;
+            }
+            if (find == true) {
+                continue;
+            }
+            for (int i = 0; i < ts.length(); ++ i) {
+                char c = ts.charAt(i);
+                if (c != '(' && c != ')') {
+                    continue;
+                }
+                String ns = ts.substring(0, i) + ts.substring(i + 1);
+                if (!visited.contains(ns)) {
+                    visited.add(ns);
+                    store.offer(ns);
+                }
+            }
+        }
+        return result;
+    }
+    
+    public boolean isValid(String s) {
+        int count = 0;
+        for (int i = 0; i < s.length(); ++ i) {
+            char c = s.charAt(i);
+            if (c == '(') {
+                ++ count;
+            } else if (c == ')') {
+                -- count;
+                if (count < 0) {
+                    return false;
+                }
+            }
+        }
+        return count == 0;
+    }
+}
