@@ -1,0 +1,15 @@
+public boolean canPartition(int[] nums) {
+    int sum = Arrays.stream(nums).reduce(0, (a, b) -> a + b);
+    if (sum  % 2 == 1) {
+        return false;
+    }
+    int target = (sum >> 1);
+    boolean [] cache = new boolean[target + 1]; // cache[i]=1 means can get target=i 
+    cache[0] = true;
+    for (int i = 0; i < nums.length; ++ i) {
+        for (int j = target; j >= nums[i]; -- j) {
+            cache[j] = (cache[j] || cache[j - nums[i]]);
+        } 
+    }
+    return cache[target];
+}
