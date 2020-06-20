@@ -1,0 +1,25 @@
+public Node flatten(Node head) {
+    for (Node visit = head; visit != null; visit = visit.next) {
+        if (visit.child == null) {
+            continue;
+        }
+        // find front and tail of child list
+        Node childFront = visit.child;
+        Node childTail = childFront;
+        while (childTail.next != null) {
+            childTail = childTail.next;
+        }
+        // insert child list into [visit, visit.next]
+        Node prev = visit;
+        Node next = visit.next;
+        prev.next = childFront;
+        childFront.prev = prev;
+        childTail.next = next;
+        if (next != null) {
+            next.prev = childTail;
+        }
+        // release visit child
+        visit.child = null;
+    }
+    return head;
+}
