@@ -1,0 +1,23 @@
+public List<List<Integer>> levelOrder(Node root) {
+    List<List<Integer>> result = new ArrayList<>();
+    if (root == null) {
+        return result;
+    }
+    Queue<Node> store = new LinkedList<>();
+    store.offer(root);
+    while (!store.isEmpty()) {
+        int size = store.size();
+        List<Integer> line = new ArrayList<>();
+        for (int i = 0; i < size; ++ i) {
+            Node node = store.poll();
+            line.add(node.val);
+            if (i == size - 1) {
+                result.add(line);
+            }
+            for (Node child : node.children) {
+                store.offer(child);
+            }
+        }
+    }
+    return result;
+}
