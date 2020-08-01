@@ -1,0 +1,12 @@
+public int[] findRightInterval(int[][] intervals) {
+    TreeMap<Integer, Integer> store = new TreeMap<>();
+    for (int i = 0; i < intervals.length; ++ i) {
+        store.put(intervals[i][0], i);
+    }
+    int[] result = new int[intervals.length];
+    for (int i = 0; i < intervals.length; ++ i) {
+       Map.Entry<Integer, Integer> ceilEntry = store.ceilingEntry(intervals[i][1]);
+       result[i] = (ceilEntry == null ? -1 : ceilEntry.getValue()); 
+    }
+    return result;
+}
