@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int pathSum(TreeNode* root, int sum) {
+        unordered_map<int, int> m;
+        m[0] = 1;
+        return helper(root, sum, 0, m);
+    }
+    int helper(TreeNode* node, int sum, int curSum, unordered_map<int, int>& m) {
+        if (!node) return 0;
+        curSum += node->val;
+        int res = m[curSum - sum];
+        ++m[curSum];
+        res += helper(node->left, sum, curSum, m) + helper(node->right, sum, curSum, m);
+        --m[curSum];
+        return res;
+    }
+};
+
+class Solution {
+    public int pathSum(TreeNode root, int sum) {
+        List<Integer> solution = new ArrayList<>();
+        backtrace(root, sum, 0, solution);
+        return result;
+    }
+    
+    private void backtrace(TreeNode root, int target, int current, List<Integer> solution) {
+        if (root == null) {
+            return;
+        }
+        current += root.val;
+        solution.add(root.val);
+        if (current == target) {
+            result += 1;
+        }
+        int sum = current;
+        for (int i = 0; i < solution.size() - 1; ++ i) {
+            sum -= solution.get(i);
+            if (sum == target) {
+                result += 1;
+            }
+        }
+        backtrace(root.left, target, current, solution);
+        backtrace(root.right, target, current, solution);
+        solution.remove(solution.size() - 1);
+    }
+    
+    private int result = 0;
+}
