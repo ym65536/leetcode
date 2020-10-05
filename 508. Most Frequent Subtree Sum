@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<int> findFrequentTreeSum(TreeNode* root) {
+        unordered_map<int, int> stats;
+        int sum_count = 0;
+        postOrder(root, sum_count, stats);
+        vector<int> result;
+        for (auto elem : stats) {
+            if (elem.second == sum_count) {
+                result.push_back(elem.first);
+            }
+        }
+        return result;
+    }
+
+private:    
+    int postOrder(TreeNode* root, int& sum_count, unordered_map<int, int>& stats) {
+        if (root == nullptr) {
+            return 0;
+        }
+        int lval = postOrder(root->left, sum_count, stats);
+        int rval = postOrder(root->right, sum_count, stats);
+        int sum = root->val + lval + rval;
+        ++stats[sum];
+        if (sum_count < stats[sum]) {
+            sum_count = stats[sum];
+        }
+        return sum;
+    }
+};
