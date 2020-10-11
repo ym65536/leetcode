@@ -1,0 +1,17 @@
+// 求连续子数组的问题，需要时刻记着求累积和是一种很犀利的工具
+
+int findMaxLength(vector<int>& nums) {
+    int maxlen = 0;
+    unordered_map<int, int> store = {{0, -1}}; /*sum, index*/
+    int sum = 0;
+    for (int i = 0; i < nums.size(); ++ i) {
+        sum += (nums[i] == 0) ? -1 : 1;
+        auto it = store.find(sum);
+        if (it != store.end()) {
+            maxlen = max(maxlen, i - it->second); 
+        } else {
+            store.insert(make_pair(sum, i));
+        }
+    }
+    return maxlen;
+}
