@@ -1,3 +1,5 @@
+// 求连续子数组的问题，需要时刻记着求累积和是一种很犀利的工具
+
 bool checkSubarraySum(vector<int>& nums, int k) {
     unordered_map<int, int> store = {{0, -1}};
     int sum = 0;
