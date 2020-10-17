@@ -1,37 +1,108 @@
 vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
-      if (matrix.empty()) {
-          return {};
-      }
-      int row = matrix.size();
-      int col = matrix[0].size();
-      vector<vector<int>> dist(row, vector<int>(col, INT_MAX - 10000));
-      for (int i = 0; i < row; ++ i) {
-          for (int j = 0; j < col; ++ j) {
-              if (matrix[i][j] == 0) {
-                  dist[i][j] = 0;
-              } else {
-                  if (i > 0) {
-                      dist[i][j] = min(dist[i][j], dist[i - 1][j] + 1);
-                  }
-                  if (j > 0) {
-                      dist[i][j] = min(dist[i][j], dist[i][j - 1] + 1);
-                  }
-              }
-          }
-      }
-      for (int i = row - 1; i >= 0; -- i) {
-          for (int j = col - 1; j >= 0; -- j) {
-              if (matrix[i][j] == 0) {
-                  dist[i][j] = 0;
-              } else {
-                  if (i + 1 < row) {
-                      dist[i][j] = min(dist[i][j], dist[i + 1][j] + 1);
-                  }
-                  if (j + 1 < col) {
-                      dist[i][j] = min(dist[i][j], dist[i][j + 1] + 1);
-                  }
-              }
-          }
-      }
-      return dist;
+  if (matrix.empty()) {
+      return {};
   }
+  int row = matrix.size();
+  int col = matrix[0].size();
+  vector<vector<int>> dist(row, vector<int>(col, INT_MAX - 10000));
+  for (int i = 0; i < row; ++ i) {
+      for (int j = 0; j < col; ++ j) {
+          if (matrix[i][j] == 0) {
+              dist[i][j] = 0;
+          } else {
+              if (i > 0) {
+                  dist[i][j] = min(dist[i][j], dist[i - 1][j] + 1);
+              }
+              if (j > 0) {
+                  dist[i][j] = min(dist[i][j], dist[i][j - 1] + 1);
+              }
+          }
+      }
+  }
+  for (int i = row - 1; i >= 0; -- i) {
+      for (int j = col - 1; j >= 0; -- j) {
+          if (matrix[i][j] == 0) {
+              dist[i][j] = 0;
+          } else {
+              if (i + 1 < row) {
+                  dist[i][j] = min(dist[i][j], dist[i + 1][j] + 1);
+              }
+              if (j + 1 < col) {
+                  dist[i][j] = min(dist[i][j], dist[i][j + 1] + 1);
+              }
+          }
+      }
+  }
+  return dist;
+}
+
+vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
+    if (matrix.empty()) {
+        return {};
+    }
+    int row = matrix.size();
+    int col = matrix[0].size();
+    vector<vector<int>> dist(row, vector<int>(col, INT_MAX - 10000));
+    queue<pair<int, int>> zpos;
+    for (int i = 0; i < row; ++ i) {
+        for (int j = 0; j < col; ++ j) {
+            if (matrix[i][j] == 0) {
+                dist[i][j] = 0;
+                zpos.push(make_pair(i, j));
+            }
+        }
+    }
+    int dir[4][2] = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+    while (!zpos.empty()) {
+        auto pos = zpos.front();
+        zpos.pop();
+        for (int i = 0; i < 4; ++ i) {
+            int nr = pos.first + dir[i][0];
+            int nc = pos.second + dir[i][1];
+            if (nr < 0 || nr >= row || nc < 0 || nc >= col) {
+                continue;
+            }
+            if (dist[nr][nc] > dist[pos.first][pos.second] + 1) {
+                dist[nr][nc] = dist[pos.first][pos.second] + 1;
+                zpos.push(make_pair(nr, nc));
+            } 
+        }
+    }
+    return dist;
+}
+
+
+// DFS
+vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
+    if (matrix.empty()) {
+        return {};
+    }
+    int row = matrix.size();
+    int col = matrix[0].size();
+    vector<vector<int>> dist(row, vector<int>(col, INT_MAX));
+    for (int i = 0; i < row; ++ i) {
+        for (int j = 0; j < col; ++ j) {
+            if (matrix[i][j] == 0) {
+                dist[i][j] = 0;
+                dfs(dist, matrix, i, j);
+            }
+        }
+    }
+    return dist;
+}
+
+void dfs(vector<vector<int>>& dist, vector<vector<int>>& matrix, int i, int j) {
+    int dir[4][2] = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+    for (int idx = 0; idx < 4; ++ idx) {
+        int nr = i + dir[idx][0];
+        int nc = j + dir[idx][1];
+        if (nr < 0 || nr >= matrix.size() || nc < 0 || nc >= matrix[0].size()) {
+            continue;
+        }
+        if (dist[nr][nc] <= dist[i][j] + 1) {
+            continue;
+        }
+        dist[nr][nc] = dist[i][j] + 1;
+        dfs(dist, matrix, nr, nc);
+    }
+}
