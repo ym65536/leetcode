@@ -1,3 +1,4 @@
+// dp
 vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
   if (matrix.empty()) {
       return {};
@@ -36,6 +37,7 @@ vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
   return dist;
 }
 
+// bfs
 vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
     if (matrix.empty()) {
         return {};
@@ -105,4 +107,41 @@ void dfs(vector<vector<int>>& dist, vector<vector<int>>& matrix, int i, int j) {
         dist[nr][nc] = dist[i][j] + 1;
         dfs(dist, matrix, nr, nc);
     }
+}
+
+
+// dfs stack
+vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
+    if (matrix.empty()) {
+        return {};
+    }
+    int row = matrix.size();
+    int col = matrix[0].size();
+    vector<vector<int>> dist(row, vector<int>(col, INT_MAX - 10000));
+    stack<pair<int, int>> zpos;
+    for (int i = 0; i < row; ++ i) {
+        for (int j = 0; j < col; ++ j) {
+            if (matrix[i][j] == 0) {
+                dist[i][j] = 0;
+                zpos.push(make_pair(i, j));
+            }
+        }
+    }
+    int dir[4][2] = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+    while (!zpos.empty()) {
+        auto pos = zpos.top();
+        zpos.pop();
+        for (int i = 0; i < 4; ++ i) {
+            int nr = pos.first + dir[i][0];
+            int nc = pos.second + dir[i][1];
+            if (nr < 0 || nr >= row || nc < 0 || nc >= col) {
+                continue;
+            }
+            if (dist[nr][nc] > dist[pos.first][pos.second] + 1) {
+                dist[nr][nc] = dist[pos.first][pos.second] + 1;
+                zpos.push(make_pair(nr, nc));
+            } 
+        }
+    }
+    return dist;
 }
