@@ -1,0 +1,25 @@
+class KthLargest {
+public:
+    KthLargest(int k, vector<int>& nums) {
+        k_ = k;
+        for (auto num : nums) {
+            addNum(num);
+        }
+    }
+    
+    int add(int val) {
+        addNum(val);
+        return store_.top();
+    }
+    
+private:
+    void addNum(int val) {
+        store_.push(val);
+        if (store_.size() > k_) {
+            store_.pop();
+        }
+    }
+    
+    priority_queue<int, vector<int>, greater<int>> store_;
+    int k_;
+};
