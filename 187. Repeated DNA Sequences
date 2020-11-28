@@ -1,16 +1,13 @@
 vector<string> findRepeatedDnaSequences(string s) {
-    unordered_map<string, int> table;
+    unordered_map<string, int> repeatedDnaMap;
     for (int i = 0; i + 10 <= s.size(); ++ i) {
-        string sub = s.substr(i, 10);
-        ++ table[sub];
+         ++ repeatedDnaMap[s.substr(i, 10)]; 
     }
-
     vector<string> result;
-    for (auto it : table) {
-        if (it.second > 1) {
-            result.push_back(it.first);
+    for (const auto& entry : repeatedDnaMap) {
+        if (entry.second > 1) {
+            result.push_back(entry.first);
         }
     }
-
     return result;
 }
