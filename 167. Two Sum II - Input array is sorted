@@ -1,0 +1,12 @@
+vector<int> twoSum(vector<int>& nums, int target) {
+    for (int i = 0, j = nums.size() - 1; i < j; ) {
+        if (nums[i] + nums[j] < target) {
+            ++ i;
+        } else if (nums[i] + nums[j] > target) {
+            -- j;
+        } else { // find it
+            return {i + 1, j + 1};
+        }
+    } 
+    return {-1, -1};
+}
