@@ -1,15 +1,21 @@
-ListNode* reverseList(ListNode* head) {
-    if (head == nullptr || head->next == nullptr) {
-        return head;
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if (head == nullptr || head->next == nullptr) {
+            return head;
+        }
+        ListNode dummy(-1, head);
+        return reverseList(&dummy, nullptr);
     }
-    ListNode* p = head;
-    ListNode* q = p->next;
-    while (q) {
-        ListNode* pt = q->next;
-        q->next = p;
-        p = q;
-        q = pt;
+private:
+    ListNode* reverseList(ListNode* prev, ListNode* tail) {
+        ListNode* last = prev->next;
+        while (last->next != tail) {
+            ListNode* node = last->next;
+            last->next = node->next;
+            node->next = prev->next;
+            prev->next = node;
+        }
+        return prev->next;
     }
-    head->next = nullptr;
-    return p;
-}
+};
