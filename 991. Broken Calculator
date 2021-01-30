@@ -1,0 +1,17 @@
+int brokenCalc(int X, int Y) {
+    // Considering change Y to X
+    // Opertation 1: Y = Y / 2 if Y is even
+    // Opertation 2: Y = Y + 1
+    long temp = Y;
+    long result = 0;
+    while (X < temp) {
+        if ((temp % 2) == 0) {
+            temp /= 2;
+        } else {
+            temp += 1;
+        }
+        ++ result;
+    }
+    result += X - temp;
+    return result;
+}
