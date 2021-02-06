@@ -1,0 +1,27 @@
+string strWithout3a3b(int a, int b) {
+    string result = "";
+    while (a > 0 && b > 0) {
+        if (a > b) {
+            result += "aab";
+            a -= 2;
+            -- b;
+        } else if (a < b) {
+            result += "bba";
+            -- a;
+            b -= 2;
+        } else {
+            result += "ab";
+            -- a;
+            -- b;
+        }
+    }
+    while (a > 0) {
+        result += "a";
+        -- a;
+    }
+    while (b > 0) {
+        result += "b";
+        -- b;
+    }
+    return result;
+}
