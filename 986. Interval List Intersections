@@ -1,23 +1,18 @@
-vector<vector<int>> intervalIntersection(vector<vector<int>>& A, vector<vector<int>>& B) {
-    int ia = 0;
-    int ib = 0;
-    vector<vector<int>> result;
-    while (ia < A.size() && ib < B.size()) {
-        if (A[ia][1] < B[ib][0]) {
-            ++ ia;
-        } else if (A[ia][0] > B[ib][1]) {
-            ++ ib;
-        } else { // intersection
-            result.push_back({max(A[ia][0], B[ib][0]), min(A[ia][1], B[ib][1])});
-            if (A[ia][1] < B[ib][1]) {
-                ++ ia;
-            } else if (A[ia][1] > B[ib][1]) {
-                ++ ib;
-            } else {
-                ++ ia;
-                ++ ib;
-            }
-        }
-    }
-    return result;
+vector<vector<int>> intervalIntersection(vector<vector<int>>& firstList, vector<vector<int>>& secondList) {
+  int i = 0;
+  int j = 0;
+  vector<vector<int>> result;
+  while (i < firstList.size() && j < secondList.size()) {
+      auto sval = max(firstList[i][0], secondList[j][0]);
+      auto eval = min(firstList[i][1], secondList[j][1]);
+      if (sval <= eval) {
+          result.push_back({sval, eval});
+      }
+      if (firstList[i][1] < secondList[j][1]) {
+          ++ i;
+      } else {
+          ++ j;
+      }
+  }
+  return result;
 }
