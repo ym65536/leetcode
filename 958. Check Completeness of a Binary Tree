@@ -1,0 +1,19 @@
+bool isCompleteTree(TreeNode* root) {
+    queue<TreeNode*> store;
+    store.push(root);
+    bool last = false;
+    while (!store.empty()) {
+        TreeNode* iter = store.front();
+        store.pop();
+        if (iter == nullptr) { // must be last one
+            last = true;
+        } else {
+            if (last) {
+                return false;
+            }
+            store.push(iter->left);
+            store.push(iter->right);
+        }
+    }
+    return true;
+}
