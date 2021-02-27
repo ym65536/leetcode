@@ -1,0 +1,19 @@
+bool canReorderDoubled(vector<int>& arr) {
+    /*If x is currently the array element with the least absolute value, it must pair with 2*x, as there does not exist any other x/2 to pair with it.*/
+    unordered_map<int, int> keyCounter;
+    for (auto entry : arr) {
+        ++ keyCounter[entry];
+    }
+    vector<int> keys;
+    for (const auto& entry : keyCounter) {
+        keys.push_back(entry.first);
+    }
+    sort(keys.begin(), keys.end(), [](int i, int j) { return abs(i) < abs(j); });
+    for (auto key : keys) {
+        if (keyCounter[key] > keyCounter[key * 2]) {
+            return false;
+        }
+        keyCounter[key * 2] -= keyCounter[key];
+    }
+    return true;
+}
