@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int totalFruit(vector<int>& tree) {
+        unordered_map<int, int> window;
+        int result = 0;
+        int left = 0;
+        for (int right = 0; right < tree.size(); ++ right) {
+            ++ window[tree[right]];
+            while (window.size() > 2) {
+                -- window[tree[left]];
+                if (window[tree[left]] == 0) {
+                    window.erase(tree[left]);
+                }
+                ++ left;
+            }
+            result = max(result, right - left + 1);
+        }
+        return result;
+    }
+};
