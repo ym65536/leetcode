@@ -1,0 +1,14 @@
+class Solution {
+public:
+    bool hasGroupsSizeX(vector<int>& deck) {
+        unordered_map<int, int> store;
+        for (auto entry : deck) {
+            ++ store[entry];
+        }
+        int result = 0;
+        for (auto entry : store) {
+            result = __gcd(result, entry.second);
+        }
+        return result > 1;
+    }
+};
