@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int sumSubarrayMins(vector<int>& arr) {
+        long long int result = 0;
+        int n = arr.size();
+        vector<int> leftDist(n, 0);
+        vector<int> rightDist(n, 0);
+        stack<pair<int, int>> prevLessStack;
+        stack<pair<int, int>> nextLessStack;
+        for (int i = 0; i < n; ++ i) {
+            rightDist[i] = n - i;
+        }
+        for (int i = 0; i < n; ++ i) {
+            while (!prevLessStack.empty() && prevLessStack.top().first > arr[i]) {
+                prevLessStack.pop();
+            }
+            leftDist[i] = prevLessStack.empty() ? (i + 1) : i - prevLessStack.top().second;
+            prevLessStack.emplace(arr[i], i);
+            
+            while (!nextLessStack.empty() && nextLessStack.top().first > arr[i]) {
+                auto entry = nextLessStack.top();
+                nextLessStack.pop();
+                rightDist[entry.second] = i - entry.second;
+            }
+            nextLessStack.emplace(arr[i], i);
+        }
+        
+        long long int mod = 1e9 + 7;
+        for (int i = 0; i < n; ++ i) {
+            result = (result + (long long int)arr[i] * leftDist[i] * rightDist[i]) % mod;
+        }
+        return (int)result;
+    }
+};
+

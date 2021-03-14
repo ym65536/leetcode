@@ -34,6 +34,7 @@ for(int i = 0; i < A.size(); i++){
   previous_less[i] = in_stk.empty()? -1: in_stk.top();
   in_stk.push(i);
 }
+
 (2) find the next less element of each element in a vector with O(n) time:
 What is the next less element of an element?
 For example:
@@ -59,10 +60,10 @@ How can the monotonous increase stack be applied to this problem?
 For example:
 Consider the element 3 in the following vector:
 
-                            [2, 9, 7, 8, 3, 4, 6, 1]
+          [2, 9, 7, 8, 3, 4, 6, 1]
 			     |                    |
-	             the previous less       the next less 
-	                element of 3          element of 3
+	    the previous less       the next less 
+	    element of 3            element of 3
 
 After finding both NLE and PLE of 3, we can determine the
 distance between 3 and 2(previous less) , and the distance between 3 and 1(next less).
