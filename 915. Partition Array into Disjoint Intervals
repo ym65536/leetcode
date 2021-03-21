@@ -1,0 +1,61 @@
+class Solution {
+public:
+    int partitionDisjoint(vector<int>& A) {
+        if (A.empty()) {
+            return 0;
+        }
+        vector<int> leftMax(A.size());
+        leftMax[0] = A[0];
+        for (int i = 1; i < A.size(); ++ i) {
+            leftMax[i] = max(leftMax[i - 1], A[i]);
+        }
+        vector<int> rightMin(A.size());
+        rightMin[A.size() - 1] = A.back();
+        for (int i = A.size() - 2; i >= 0; -- i) {
+            rightMin[i] = min(rightMin[i + 1], A[i]);
+        }
+        for (int i = 0; i < A.size() - 1; ++ i) {
+            if (leftMax[i] <= rightMin[i + 1]) {
+                return i + 1;
+            }
+        }
+        return -1;
+    }
+};
+
+class Solution {
+public:
+    int partitionDisjoint(vector<int>& A) {
+        int len = A.size();
+        vector<int> from_left_max(len, A[0]);
+        for (int i = 1; i < len; i++) {
+            from_left_max[i] = max(from_left_max[i-1], A[i]);
+        }
+       int right_min = A[len-1];
+        int res = -1;
+        for (int i = len-1; i > 0; i--) {
+            right_min = min(right_min, A[i]);
+            res = from_left_max[i-1]<=right_min ? i : res;
+        }
+        return res;
+    }
+};
+
+
+class Solution {
+public:
+    int partitionDisjoint(vector<int>& A) {
+        int local_max = A[0], global_max = A[0];
+        int partition = 0;
+        for (int i = 1; i < A.size(); i++) {
+            if (A[i] < local_max) {
+                partition = i;
+                local_max = global_max;
+            } else {
+                global_max = max(global_max, A[i]);
+            }
+        }
+        return partition+1;
+    }
+};
+
