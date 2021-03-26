@@ -1,29 +1,42 @@
-ListNode* reverseKGroup(ListNode* head, int k) {
-    ListNode dummy(INT_MIN);
-    dummy.next = head;
-    ListNode* prev = &dummy;
-    ListNode* visit = prev->next;
-    int idx = 0;
-    while (visit != nullptr) {
-        ++ idx;
-        if (idx % k == 0) {
-            prev = reverseList(prev, visit->next);
-            visit = prev->next;
-        } else {
-            visit = visit->next;
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        ListNode dummy(-1, head);
+        ListNode* iter = head;
+        ListNode* prev = &dummy;
+        int idx = 0;
+        while (iter != nullptr) {
+            ++ idx;
+            if (idx % k != 0) {
+                iter = iter->next;
+            } else {
+                prev = reverse(prev, iter->next);
+                iter = prev->next;
+            }
         }
+        return dummy.next;
     }
-    return dummy.next;
-}
 
-// reverse list range (prev, next), exclude prev and next
-ListNode* reverseList(ListNode* prev, ListNode* next) {
-    ListNode* last = prev->next;
-    while (last->next != next) {
-        ListNode* node = last->next;
-        last->next = node->next;
-        node->next = prev->next;
-        prev->next = node;
+    // reverse list range (prev, next), exclude prev and next
+    ListNode* reverse(ListNode* prev, ListNode* tail) {
+        ListNode* last = prev->next;
+        while (last->next != tail) {
+            ListNode* node = last->next;
+            last->next = node->next;
+            node->next = prev->next;
+            prev->next = node;
+        }
+        return last;
     }
-    return last;
-}
+};
+
