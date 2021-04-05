@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+      if (matrix.empty()) {
+        return 0;
+      }
+      vector<vector<int>> store(matrix.size(), vector<int>(matrix[0].size(), 0));
+      store[0] = matrix[0];
+      for (auto i = 1; i < matrix.size(); ++ i) {
+        for (auto j = 0; j < matrix[0].size(); ++ j) {
+          auto upLeft = j > 0 ? store[i - 1][j - 1] : INT_MAX;
+          auto upRight = j < matrix[0].size() - 1 ? store[i - 1][j + 1] : INT_MAX;
+          store[i][j] = matrix[i][j] + min(store[i - 1][j], min(upLeft, upRight));
+        }
+      }
+      return *min_element(store.back().begin(), store.back().end());
+    }
+};

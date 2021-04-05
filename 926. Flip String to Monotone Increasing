@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int minFlipsMonoIncr(string S) {
+      if (S.empty()) {
+        return 0;
+      }
+      vector<int> suffix_0_min(S.size(), 0);
+      vector<int> suffix_1_min(S.size(), 0);
+      suffix_0_min[0] = (S[0] == '1');
+      suffix_1_min[0] = (S[0] == '0');
+      for (int i = 1; i < S.size(); ++ i) {
+        suffix_0_min[i] = suffix_0_min[i - 1] + (S[i] == '1');
+        suffix_1_min[i] = min(suffix_0_min[i - 1] + (S[i] == '0'), suffix_1_min[i - 1] + (S[i] == '0'));
+      }
+      return min(suffix_0_min.back(), suffix_1_min.back());
+    }
+};
+
+to optimize.
+class Solution {
+public:
+    int minFlipsMonoIncr(string S) {
+      if (S.empty()) {
+        return 0;
+      }
+      int suffix_0_min_prev;
+      int suffix_1_min_prev;
+      suffix_0_min_prev = (S[0] == '1');
+      suffix_1_min_prev = (S[0] == '0');
+      for (int i = 1; i < S.size(); ++ i) {
+        int suffix_0_min = suffix_0_min_prev + (S[i] == '1');
+        int suffix_1_min = min(suffix_0_min_prev + (S[i] == '0'), suffix_1_min_prev + (S[i] == '0'));
+        suffix_0_min_prev = suffix_0_min;
+        suffix_1_min_prev = suffix_1_min;
+      }
+      return min(suffix_0_min_prev, suffix_1_min_prev);
+    }
+};
