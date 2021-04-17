@@ -1,0 +1,24 @@
+// we just need use a queue as slide-window to store [t - 3000, t] request
+class RecentCounter {
+public:
+    RecentCounter() {
+        
+    }
+    
+    int ping(int t) {
+      store_.push(t);
+      while (store_.front() < t - 3000) {
+        store_.pop();
+      }
+      return store_.size();
+    }
+private:
+  queue<int> store_;
+};
+
+/**
+ * Your RecentCounter object will be instantiated and called as such:
+ * RecentCounter* obj = new RecentCounter();
+ * int param_1 = obj->ping(t);
+ */
+

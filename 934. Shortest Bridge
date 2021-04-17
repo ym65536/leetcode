@@ -1,0 +1,62 @@
+class Solution {
+public:
+  int shortestBridge(vector<vector<int>>& A) {
+    if (A.empty()) {
+      return 0;
+    }
+    bool found = false;
+    vector<vector<int>> patten(A.size(), vector<int>(A[0].size(), 0));
+    for (auto i = 0; !found && (i < A.size()); ++ i) {
+      for (auto j = 0; j < A[0].size(); ++ j) {
+        if (A[i][j] == 1) {
+          traverse(A, patten, i, j);
+          found = true;
+          break;
+        }
+      }
+    }
+    auto dist = 0;
+    while (!store.empty()) {
+      auto qsize = store.size();
+      for (auto k = 0; k < qsize; ++ k) {
+        auto pos = store.front();
+        store.pop();
+        for (auto dir : dirs) {
+          auto i = pos.first + dir.first;
+          auto j = pos.second + dir.second;
+          if (!isValid(A, i, j) || patten[i][j]) {
+            continue;
+          }
+          if (A[i][j] == 1) {
+            return dist;
+          }
+          patten[i][j] = 1;
+          store.push(make_pair(i, j));
+        }
+      }
+      ++ dist;
+    }
+    return dist;
+  }
+private:
+  vector<pair<int, int>> dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+  queue<pair<int, int>> store;
+  
+  void traverse(const vector<vector<int>>& A, vector<vector<int>>& patten, int i, int j) {
+    if (!isValid(A, i, j) || (A[i][j] == 0) || patten[i][j]) {
+      return;
+    }
+    patten[i][j] = 1;
+    store.push(make_pair(i, j));
+    for (auto dir : dirs) {
+      traverse(A, patten, i + dir.first, j + dir.second);
+    }
+  }
+  
+  bool isValid(const vector<vector<int>>& A, int i, int j) {
+    if (i < 0 || j < 0 || i >= A.size() || j >= A[0].size()) {
+      return false;
+    }
+    return true;
+  }
+};

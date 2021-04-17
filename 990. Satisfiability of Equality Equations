@@ -1,0 +1,54 @@
+class Solution {
+public:
+    bool equationsPossible(vector<string>& equations) {
+      dsfInit();
+      for (const auto& equation : equations) {
+        if (equation[1] == '=') {
+          unionSet(equation[0], equation[3]);
+        }
+      }
+      for (const auto& equation : equations) {
+        if (equation[1] == '!') {
+          if (findSet(equation[0]) == findSet(equation[3])) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+  
+private:
+  vector<pair<int, int>> dsf_;
+  
+  void dsfInit() {
+    for (int i = 0; i < 256; ++ i) {
+      makeSet(i);
+    }
+  }
+  
+  void makeSet(int x) {
+    dsf_.emplace_back(x, 0);
+  }
+  
+  pair<int, int> findSet(int x) {
+    if (x != dsf_[x].first) {
+      auto temp = findSet(dsf_[x].first);
+      dsf_[x].first = temp.first;
+    }
+    return dsf_[x];
+  }
+  
+  void unionSet(int x, int y) {
+    auto sx = findSet(x);
+    auto sy = findSet(y);
+    if (sx.second > sy.second) {
+      dsf_[sy.first].first = sx.first;
+    } else {
+      dsf_[sx.first].first = sy.first;
+      if (sx.second == sy.second) {
+        sy.second += 1;
+      }
+    } 
+  }
+};
+
