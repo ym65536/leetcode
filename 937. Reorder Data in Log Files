@@ -1,0 +1,25 @@
+vector<string> reorderLogFiles(vector<string>& logs) {
+  auto compare = [](const string& sa, const string& sb) {
+    auto aPos = sa.find(' ');
+    auto bPos = sb.find(' ');
+    auto aChar = sa[aPos + 1];
+    auto bChar = sb[bPos + 1];
+    if (aChar <= '9' && bChar <= '9') {
+      return false;
+    } else if (aChar <= '9' && bChar > '9') {
+      return false;
+    } else if (aChar > '9' && bChar <= '9') {
+      return true;
+    } else {
+      string aSuf = sa.substr(aPos);
+      string bSuf = sb.substr(bPos);
+      if (aSuf == bSuf) {
+        return sa < sb;
+      } else {
+        return aSuf < bSuf;
+      }
+    }
+  };
+  stable_sort(logs.begin(), logs.end(), compare);
+  return logs;
+}
