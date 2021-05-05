@@ -1,12 +1,15 @@
-bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
-    stack<int> s;
+class Solution {
+public:
+  bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
+    stack<int> store;
     int idx = 0;
-    for (auto elem : pushed) {
-        s.push(elem);
-        while (!s.empty() && idx < popped.size() && popped[idx] == s.top()) {
-            s.pop();
-            ++ idx;
-        }
+    for (const auto& elem : pushed) {
+      store.push(elem);
+      while (!store.empty() && (store.top() == popped[idx])) {
+        store.pop();
+        ++ idx;
+      }
     }
-    return idx == popped.size();
-}
+    return store.empty();
+  }
+};
