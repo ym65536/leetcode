@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int minAreaRect(vector<vector<int>>& points) {
+      unordered_map<int, set<int>> xylist;
+      for (const auto& point : points) {
+        auto x = point[0], y = point[1];
+        xylist[x].insert(y);
+      }
+      int result = INT_MAX;
+      for (const auto& p1 : points) {
+        for (const auto& p2 : points) {
+          auto p1x = p1[0], p1y = p1[1];
+          auto p2x = p2[0], p2y = p2[1];
+          if (p1x == p2x || p1y == p2y || !xylist[p1x].count(p2y) || !xylist[p2x].count(p1y)) {
+            continue;
+          }
+          result = min(abs(p1x - p2x) * abs(p1y - p2y), result);
+        }
+      }
+      return (result == INT_MAX) ? 0 : result;
+    }
+};
+

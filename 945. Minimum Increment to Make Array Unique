@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int minIncrementForUnique(vector<int>& nums) {
+      int result = 0;
+      int target = 0;
+      sort(nums.begin(), nums.end());
+      for (const auto& num : nums) {
+        result += max(target - num, 0);
+        target = max(target, num) + 1;
+      }
+      return result;
+    }
+};
