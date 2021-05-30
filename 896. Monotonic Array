@@ -1,0 +1,16 @@
+class Solution {
+public:
+    bool isMonotonic(vector<int>& nums) {
+        bool incr = true;
+        bool decr = true;
+        for (int i = 1; i < nums.size(); ++ i) {
+            if (nums[i - 1] < nums[i]) {
+                decr = false;
+            }
+            if (nums[i - 1] > nums[i]) {
+                incr = false;
+            }
+        }
+        return incr || decr;
+    }
+};
