@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<string> findAndReplacePattern(vector<string>& words, string pattern) {
+        vector<string> result;
+        string stardard = standardPattern(pattern);
+        for (const auto& word : words) {
+            if (standardPattern(word) == stardard) {
+                result.push_back(word);
+            }
+        }
+        return result;
+    }
+    
+    string standardPattern(const std::string& str) {
+        unordered_map<char, int> charCountMap;
+        string result;
+        for (const auto& c : str) {
+            if (!charCountMap.count(c)) {
+                charCountMap[c] = charCountMap.size();
+            }
+        }
+        for (const auto&c : str) {
+            result.push_back(charCountMap[c] + 'a');
+        }
+        return result;
+    }
+};
