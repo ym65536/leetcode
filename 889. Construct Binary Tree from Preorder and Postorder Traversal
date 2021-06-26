@@ -1,0 +1,31 @@
+/*
+pre:[root, [left part], [right part]]
+post:[[left part], [right part], root]
+the key point is to find the pivot between left part and right part
+*/
+class Solution {
+public:
+  TreeNode* constructFromPrePost(vector<int>& pre, vector<int>& post) {
+    return formatPrePost(pre, 0, pre.size() - 1, post, 0, post.size() - 1);
+  }
+  
+  TreeNode* formatPrePost(vector<int>& pre, int prl, int prr, vector<int>& post, int pol, int por) {
+    if (prl > prr) {
+      return nullptr;
+    }
+    TreeNode* root = new TreeNode(pre[prl]);
+    ++ prl;
+    -- por;
+    auto rightPos = prl;
+    for ( ; rightPos <= prr; ++ rightPos) {
+      if (pre[rightPos] == post[por]) {
+        break;
+      }
+    }
+    int lsize = rightPos - prl;
+    root->left = formatPrePost(pre, prl, rightPos - 1, post, pol, pol + lsize - 1);
+    root->right = formatPrePost(pre, rightPos, prr, post, pol + lsize, por);
+    return root;
+  }
+};
+
