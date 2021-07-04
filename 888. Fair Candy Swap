@@ -1,0 +1,16 @@
+class Solution {
+public:
+  vector<int> fairCandySwap(vector<int>& aliceSizes, vector<int>& bobSizes) {
+    auto aliceSum = std::accumulate(std::begin(aliceSizes), std::end(aliceSizes), 0);
+    auto bobSum = std::accumulate(std::begin(bobSizes), std::end(bobSizes), 0);
+    auto equalSum = (aliceSum + bobSum) / 2;
+    unordered_set<int> aliceSet{std::begin(aliceSizes), std::end(aliceSizes)};
+    for (const auto bobCandy : bobSizes) {
+      auto target = equalSum - (bobSum - bobCandy);
+      if (aliceSet.count(target)) {
+        return {target, bobCandy};
+      }
+    }
+    return {};
+  }
+};
