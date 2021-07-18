@@ -1,0 +1,57 @@
+class Solution {
+public:
+    bool possibleBipartition(int n, vector<vector<int>>& dislikes) {
+        dsfInit(n);
+        vector<vector<int>> graph(n + 1, vector<int>());
+        for (const auto& edge : dislikes) {
+            graph[edge[0]].push_back(edge[1]);
+        }
+        for (const auto& edge : dislikes) {
+            auto x = findSet(edge[0]);
+            auto y = findSet(edge[1]);
+            if (x == y) {
+                return false;
+            }
+            for (const auto& node : graph[edge[1]]) {
+                unionSet(edge[0], node);
+            }
+            for (const auto& node : graph[edge[0]]) {
+                unionSet(edge[1], node);
+            }
+        }
+        return true;
+    }
+private:
+  vector<pair<int, int>> dsf_;
+    
+  void dsfInit(int n) {
+    for (int i = 0; i <= n; ++ i) {
+      makeSet(i);
+    }
+  }
+    
+  void makeSet(int x) {
+    dsf_.emplace_back(x, 0);
+  }
+    
+  pair<int, int> findSet(int x) {
+    if (x != dsf_[x].first) {
+      auto temp = findSet(dsf_[x].first);
+      dsf_[x].first = temp.first;
+    }
+    return dsf_[x];
+  }
+
+  void unionSet(int x, int y) {
+    auto sx = findSet(x);
+    auto sy = findSet(y);
+    if (sx.second > sy.second) {
+      dsf_[sy.first].first = sx.first;
+    } else {
+      dsf_[sx.first].first = sy.first;
+      if (sx.second == sy.second) {
+        sy.second += 1;
+      }
+    }
+  }
+};
